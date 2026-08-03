@@ -12,6 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
+import { Route as PublicarRouteImport } from './routes/publicar'
+import { Route as SolicitudesRouteImport } from './routes/solicitudes'
+import { Route as ProductoIdRouteImport } from './routes/producto.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +32,93 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
   path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MisPublicacionesRoute = MisPublicacionesRouteImport.update({
+  id: '/mis-publicaciones',
+  path: '/mis-publicaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicarRoute = PublicarRouteImport.update({
+  id: '/publicar',
+  path: '/publicar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolicitudesRoute = SolicitudesRouteImport.update({
+  id: '/solicitudes',
+  path: '/solicitudes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductoIdRoute = ProductoIdRouteImport.update({
+  id: '/producto/$id',
+  path: '/producto/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/marketplace'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/marketplace'
-  id: '__root__' | '/' | '/dashboard' | '/marketplace'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MisPublicacionesRoute: typeof MisPublicacionesRoute
+  PublicarRoute: typeof PublicarRoute
+  SolicitudesRoute: typeof SolicitudesRoute
+  ProductoIdRoute: typeof ProductoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +144,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mis-publicaciones': {
+      id: '/mis-publicaciones'
+      path: '/mis-publicaciones'
+      fullPath: '/mis-publicaciones'
+      preLoaderRoute: typeof MisPublicacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publicar': {
+      id: '/publicar'
+      path: '/publicar'
+      fullPath: '/publicar'
+      preLoaderRoute: typeof PublicarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solicitudes': {
+      id: '/solicitudes'
+      path: '/solicitudes'
+      fullPath: '/solicitudes'
+      preLoaderRoute: typeof SolicitudesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/producto/$id': {
+      id: '/producto/$id'
+      path: '/producto/$id'
+      fullPath: '/producto/$id'
+      preLoaderRoute: typeof ProductoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +179,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MisPublicacionesRoute: MisPublicacionesRoute,
+  PublicarRoute: PublicarRoute,
+  SolicitudesRoute: SolicitudesRoute,
+  ProductoIdRoute: ProductoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

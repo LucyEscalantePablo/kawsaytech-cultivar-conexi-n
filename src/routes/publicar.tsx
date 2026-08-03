@@ -41,9 +41,18 @@ function Publicar() {
   const guardar = () => {
     const cant = Number(cantidad);
     const prec = Number(precio);
-    if (!cant || cant <= 0) return toast.error("Ingresa la cantidad");
-    if (!prec || prec <= 0) return toast.error("Ingresa el precio");
-    if (!distrito.trim()) return toast.error("Indica el distrito");
+    if (!cant || cant <= 0) {
+      toast.error("Ingresa la cantidad");
+      return;
+    }
+    if (!prec || prec <= 0) {
+      toast.error("Ingresa el precio");
+      return;
+    }
+    if (!distrito.trim()) {
+      toast.error("Indica el distrito");
+      return;
+    }
     crearPublicacion({
       cultivo,
       variedad,

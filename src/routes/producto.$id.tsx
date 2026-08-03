@@ -65,8 +65,14 @@ function DetalleProducto() {
   const enviar = () => {
     const cant = Number(cantidad);
     const prec = Number(precio);
-    if (!cant || cant <= 0 || cant > pub.cantidad) return toast.error("Ingresa una cantidad válida");
-    if (!prec || prec <= 0) return toast.error("Ingresa el precio ofrecido");
+    if (!cant || cant <= 0 || cant > pub.cantidad) {
+      toast.error("Ingresa una cantidad válida");
+      return;
+    }
+    if (!prec || prec <= 0) {
+      toast.error("Ingresa el precio ofrecido");
+      return;
+    }
     crearSolicitud({
       publicacionId: pub.id,
       comprador: "Comprador demo",
