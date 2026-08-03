@@ -10,33 +10,245 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlertasRouteImport } from './routes/alertas'
+import { Route as ArquitecturaRouteImport } from './routes/arquitectura'
+import { Route as AyudaRouteImport } from './routes/ayuda'
+import { Route as ConfiguracionRouteImport } from './routes/configuracion'
+import { Route as CuidadosRouteImport } from './routes/cuidados'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
+import { Route as EstadisticasRouteImport } from './routes/estadisticas'
+import { Route as FertilizantesRouteImport } from './routes/fertilizantes'
+import { Route as HistorialRouteImport } from './routes/historial'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as PublicarRouteImport } from './routes/publicar'
+import { Route as SolicitudesRouteImport } from './routes/solicitudes'
+import { Route as ProductoIdRouteImport } from './routes/producto.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertasRoute = AlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArquitecturaRoute = ArquitecturaRouteImport.update({
+  id: '/arquitectura',
+  path: '/arquitectura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AyudaRoute = AyudaRouteImport.update({
+  id: '/ayuda',
+  path: '/ayuda',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracionRoute = ConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CuidadosRoute = CuidadosRouteImport.update({
+  id: '/cuidados',
+  path: '/cuidados',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosticoRoute = DiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstadisticasRoute = EstadisticasRouteImport.update({
+  id: '/estadisticas',
+  path: '/estadisticas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FertilizantesRoute = FertilizantesRouteImport.update({
+  id: '/fertilizantes',
+  path: '/fertilizantes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MisPublicacionesRoute = MisPublicacionesRouteImport.update({
+  id: '/mis-publicaciones',
+  path: '/mis-publicaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicarRoute = PublicarRouteImport.update({
+  id: '/publicar',
+  path: '/publicar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolicitudesRoute = SolicitudesRouteImport.update({
+  id: '/solicitudes',
+  path: '/solicitudes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductoIdRoute = ProductoIdRouteImport.update({
+  id: '/producto/$id',
+  path: '/producto/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/cuidados': typeof CuidadosRoute
+  '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/cuidados': typeof CuidadosRoute
+  '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
+  '/cuidados': typeof CuidadosRoute
+  '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
+  '/publicar': typeof PublicarRoute
+  '/solicitudes': typeof SolicitudesRoute
+  '/producto/$id': typeof ProductoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
+    | '/cuidados'
+    | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/perfil'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
+    | '/cuidados'
+    | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/perfil'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
+    | '/cuidados'
+    | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
+    | '/marketplace'
+    | '/mis-publicaciones'
+    | '/perfil'
+    | '/publicar'
+    | '/solicitudes'
+    | '/producto/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertasRoute: typeof AlertasRoute
+  ArquitecturaRoute: typeof ArquitecturaRoute
+  AyudaRoute: typeof AyudaRoute
+  ConfiguracionRoute: typeof ConfiguracionRoute
+  CuidadosRoute: typeof CuidadosRoute
+  DashboardRoute: typeof DashboardRoute
+  DiagnosticoRoute: typeof DiagnosticoRoute
+  EstadisticasRoute: typeof EstadisticasRoute
+  FertilizantesRoute: typeof FertilizantesRoute
+  HistorialRoute: typeof HistorialRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  MisPublicacionesRoute: typeof MisPublicacionesRoute
+  PerfilRoute: typeof PerfilRoute
+  PublicarRoute: typeof PublicarRoute
+  SolicitudesRoute: typeof SolicitudesRoute
+  ProductoIdRoute: typeof ProductoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +260,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alertas': {
+      id: '/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AlertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arquitectura': {
+      id: '/arquitectura'
+      path: '/arquitectura'
+      fullPath: '/arquitectura'
+      preLoaderRoute: typeof ArquitecturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ayuda': {
+      id: '/ayuda'
+      path: '/ayuda'
+      fullPath: '/ayuda'
+      preLoaderRoute: typeof AyudaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracion': {
+      id: '/configuracion'
+      path: '/configuracion'
+      fullPath: '/configuracion'
+      preLoaderRoute: typeof ConfiguracionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cuidados': {
+      id: '/cuidados'
+      path: '/cuidados'
+      fullPath: '/cuidados'
+      preLoaderRoute: typeof CuidadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnostico': {
+      id: '/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/diagnostico'
+      preLoaderRoute: typeof DiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estadisticas': {
+      id: '/estadisticas'
+      path: '/estadisticas'
+      fullPath: '/estadisticas'
+      preLoaderRoute: typeof EstadisticasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fertilizantes': {
+      id: '/fertilizantes'
+      path: '/fertilizantes'
+      fullPath: '/fertilizantes'
+      preLoaderRoute: typeof FertilizantesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mis-publicaciones': {
+      id: '/mis-publicaciones'
+      path: '/mis-publicaciones'
+      fullPath: '/mis-publicaciones'
+      preLoaderRoute: typeof MisPublicacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publicar': {
+      id: '/publicar'
+      path: '/publicar'
+      fullPath: '/publicar'
+      preLoaderRoute: typeof PublicarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solicitudes': {
+      id: '/solicitudes'
+      path: '/solicitudes'
+      fullPath: '/solicitudes'
+      preLoaderRoute: typeof SolicitudesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/producto/$id': {
+      id: '/producto/$id'
+      path: '/producto/$id'
+      fullPath: '/producto/$id'
+      preLoaderRoute: typeof ProductoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertasRoute: AlertasRoute,
+  ArquitecturaRoute: ArquitecturaRoute,
+  AyudaRoute: AyudaRoute,
+  ConfiguracionRoute: ConfiguracionRoute,
+  CuidadosRoute: CuidadosRoute,
+  DashboardRoute: DashboardRoute,
+  DiagnosticoRoute: DiagnosticoRoute,
+  EstadisticasRoute: EstadisticasRoute,
+  FertilizantesRoute: FertilizantesRoute,
+  HistorialRoute: HistorialRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  MisPublicacionesRoute: MisPublicacionesRoute,
+  PerfilRoute: PerfilRoute,
+  PublicarRoute: PublicarRoute,
+  SolicitudesRoute: SolicitudesRoute,
+  ProductoIdRoute: ProductoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
