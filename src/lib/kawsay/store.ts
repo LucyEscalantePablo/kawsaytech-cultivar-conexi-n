@@ -236,7 +236,7 @@ export function useKawsayData() {
 }
 
 export const getAgricultor = (id: string) =>
-  agricultores.find((a) => a.id === id) ?? agricultores[0];
+  agricultores.find((a) => a.id === id) ?? agricultores[0]!;
 
 export const getPublicacion = (id: string) => publicaciones.find((p) => p.id === id);
 
