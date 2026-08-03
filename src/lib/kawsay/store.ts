@@ -228,7 +228,9 @@ export function useKawsayData() {
   useEffect(() => {
     const l = () => setTick((t) => t + 1);
     listeners.add(l);
-    return () => listeners.delete(l);
+    return () => {
+      listeners.delete(l);
+    };
   }, []);
   return { publicaciones, solicitudes, ventas, agricultores };
 }
