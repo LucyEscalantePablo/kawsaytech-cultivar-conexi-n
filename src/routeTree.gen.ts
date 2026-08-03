@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertasRouteImport } from './routes/alertas'
+import { Route as ArquitecturaRouteImport } from './routes/arquitectura'
+import { Route as AyudaRouteImport } from './routes/ayuda'
+import { Route as ConfiguracionRouteImport } from './routes/configuracion'
 import { Route as CuidadosRouteImport } from './routes/cuidados'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
@@ -19,6 +22,7 @@ import { Route as FertilizantesRouteImport } from './routes/fertilizantes'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
+import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PublicarRouteImport } from './routes/publicar'
 import { Route as SolicitudesRouteImport } from './routes/solicitudes'
 import { Route as ProductoIdRouteImport } from './routes/producto.$id'
@@ -31,6 +35,21 @@ const IndexRoute = IndexRouteImport.update({
 const AlertasRoute = AlertasRouteImport.update({
   id: '/alertas',
   path: '/alertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArquitecturaRoute = ArquitecturaRouteImport.update({
+  id: '/arquitectura',
+  path: '/arquitectura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AyudaRoute = AyudaRouteImport.update({
+  id: '/ayuda',
+  path: '/ayuda',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracionRoute = ConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CuidadosRoute = CuidadosRouteImport.update({
@@ -73,6 +92,11 @@ const MisPublicacionesRoute = MisPublicacionesRouteImport.update({
   path: '/mis-publicaciones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicarRoute = PublicarRouteImport.update({
   id: '/publicar',
   path: '/publicar',
@@ -92,6 +116,9 @@ const ProductoIdRoute = ProductoIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -100,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -107,6 +135,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -115,6 +146,7 @@ export interface FileRoutesByTo {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -123,6 +155,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
+  '/arquitectura': typeof ArquitecturaRoute
+  '/ayuda': typeof AyudaRoute
+  '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
@@ -131,6 +166,7 @@ export interface FileRoutesById {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -140,6 +176,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
@@ -148,6 +187,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
+    | '/perfil'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -155,6 +195,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
@@ -163,6 +206,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
+    | '/perfil'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -170,6 +214,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/alertas'
+    | '/arquitectura'
+    | '/ayuda'
+    | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
@@ -178,6 +225,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
+    | '/perfil'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -186,6 +234,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertasRoute: typeof AlertasRoute
+  ArquitecturaRoute: typeof ArquitecturaRoute
+  AyudaRoute: typeof AyudaRoute
+  ConfiguracionRoute: typeof ConfiguracionRoute
   CuidadosRoute: typeof CuidadosRoute
   DashboardRoute: typeof DashboardRoute
   DiagnosticoRoute: typeof DiagnosticoRoute
@@ -194,6 +245,7 @@ export interface RootRouteChildren {
   HistorialRoute: typeof HistorialRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MisPublicacionesRoute: typeof MisPublicacionesRoute
+  PerfilRoute: typeof PerfilRoute
   PublicarRoute: typeof PublicarRoute
   SolicitudesRoute: typeof SolicitudesRoute
   ProductoIdRoute: typeof ProductoIdRoute
@@ -213,6 +265,27 @@ declare module '@tanstack/react-router' {
       path: '/alertas'
       fullPath: '/alertas'
       preLoaderRoute: typeof AlertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arquitectura': {
+      id: '/arquitectura'
+      path: '/arquitectura'
+      fullPath: '/arquitectura'
+      preLoaderRoute: typeof ArquitecturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ayuda': {
+      id: '/ayuda'
+      path: '/ayuda'
+      fullPath: '/ayuda'
+      preLoaderRoute: typeof AyudaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracion': {
+      id: '/configuracion'
+      path: '/configuracion'
+      fullPath: '/configuracion'
+      preLoaderRoute: typeof ConfiguracionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cuidados': {
@@ -271,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MisPublicacionesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/publicar': {
       id: '/publicar'
       path: '/publicar'
@@ -298,6 +378,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertasRoute: AlertasRoute,
+  ArquitecturaRoute: ArquitecturaRoute,
+  AyudaRoute: AyudaRoute,
+  ConfiguracionRoute: ConfiguracionRoute,
   CuidadosRoute: CuidadosRoute,
   DashboardRoute: DashboardRoute,
   DiagnosticoRoute: DiagnosticoRoute,
@@ -306,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistorialRoute: HistorialRoute,
   MarketplaceRoute: MarketplaceRoute,
   MisPublicacionesRoute: MisPublicacionesRoute,
+  PerfilRoute: PerfilRoute,
   PublicarRoute: PublicarRoute,
   SolicitudesRoute: SolicitudesRoute,
   ProductoIdRoute: ProductoIdRoute,
