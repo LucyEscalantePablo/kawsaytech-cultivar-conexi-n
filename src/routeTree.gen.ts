@@ -10,7 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlertasRouteImport } from './routes/alertas'
+import { Route as CuidadosRouteImport } from './routes/cuidados'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
+import { Route as EstadisticasRouteImport } from './routes/estadisticas'
+import { Route as FertilizantesRouteImport } from './routes/fertilizantes'
+import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
 import { Route as PublicarRouteImport } from './routes/publicar'
@@ -22,9 +28,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertasRoute = AlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CuidadosRoute = CuidadosRouteImport.update({
+  id: '/cuidados',
+  path: '/cuidados',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosticoRoute = DiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstadisticasRoute = EstadisticasRouteImport.update({
+  id: '/estadisticas',
+  path: '/estadisticas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FertilizantesRoute = FertilizantesRouteImport.update({
+  id: '/fertilizantes',
+  path: '/fertilizantes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
@@ -55,7 +91,13 @@ const ProductoIdRoute = ProductoIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/publicar': typeof PublicarRoute
@@ -64,7 +106,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/publicar': typeof PublicarRoute
@@ -74,7 +122,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alertas': typeof AlertasRoute
+  '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
+  '/diagnostico': typeof DiagnosticoRoute
+  '/estadisticas': typeof EstadisticasRoute
+  '/fertilizantes': typeof FertilizantesRoute
+  '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/publicar': typeof PublicarRoute
@@ -85,7 +139,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/alertas'
+    | '/cuidados'
     | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
     | '/publicar'
@@ -94,7 +154,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/alertas'
+    | '/cuidados'
     | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
     | '/publicar'
@@ -103,7 +169,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/alertas'
+    | '/cuidados'
     | '/dashboard'
+    | '/diagnostico'
+    | '/estadisticas'
+    | '/fertilizantes'
+    | '/historial'
     | '/marketplace'
     | '/mis-publicaciones'
     | '/publicar'
@@ -113,7 +185,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertasRoute: typeof AlertasRoute
+  CuidadosRoute: typeof CuidadosRoute
   DashboardRoute: typeof DashboardRoute
+  DiagnosticoRoute: typeof DiagnosticoRoute
+  EstadisticasRoute: typeof EstadisticasRoute
+  FertilizantesRoute: typeof FertilizantesRoute
+  HistorialRoute: typeof HistorialRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MisPublicacionesRoute: typeof MisPublicacionesRoute
   PublicarRoute: typeof PublicarRoute
@@ -130,11 +208,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alertas': {
+      id: '/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AlertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cuidados': {
+      id: '/cuidados'
+      path: '/cuidados'
+      fullPath: '/cuidados'
+      preLoaderRoute: typeof CuidadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnostico': {
+      id: '/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/diagnostico'
+      preLoaderRoute: typeof DiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estadisticas': {
+      id: '/estadisticas'
+      path: '/estadisticas'
+      fullPath: '/estadisticas'
+      preLoaderRoute: typeof EstadisticasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fertilizantes': {
+      id: '/fertilizantes'
+      path: '/fertilizantes'
+      fullPath: '/fertilizantes'
+      preLoaderRoute: typeof FertilizantesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace': {
@@ -177,7 +297,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertasRoute: AlertasRoute,
+  CuidadosRoute: CuidadosRoute,
   DashboardRoute: DashboardRoute,
+  DiagnosticoRoute: DiagnosticoRoute,
+  EstadisticasRoute: EstadisticasRoute,
+  FertilizantesRoute: FertilizantesRoute,
+  HistorialRoute: HistorialRoute,
   MarketplaceRoute: MarketplaceRoute,
   MisPublicacionesRoute: MisPublicacionesRoute,
   PublicarRoute: PublicarRoute,
