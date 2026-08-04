@@ -38,6 +38,7 @@ export interface Solicitud {
   id: string;
   publicacionId: string;
   comprador: string;
+  compradorEmail?: string;
   cantidad: number;
   precioOfrecido: number;
   mensaje: string;
@@ -50,6 +51,7 @@ export interface Venta {
   id: string;
   publicacionId: string;
   comprador: string;
+  compradorEmail?: string;
   cantidad: number;
   precio: number;
   fecha: string;
