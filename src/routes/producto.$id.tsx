@@ -101,7 +101,7 @@ function DetalleProducto() {
     crearSolicitud({
       publicacionId: pub.id,
       comprador: usuario?.nombre ?? "Comprador",
-      compradorEmail: usuario?.email,
+      compradorEmail: usuario?.email ?? "",
       cantidad: cant,
       precioOfrecido: prec,
       mensaje: mensaje.slice(0, 500),

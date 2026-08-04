@@ -161,7 +161,8 @@ let solicitudes: Solicitud[] = [
   {
     id: "sol-1",
     publicacionId: "pub-1",
-    comprador: "Mercado Mayorista Santa Anita",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 1200,
     precioOfrecido: 2.45,
     mensaje: "Necesitamos entrega en dos camionadas, pagamos al contado en chacra.",
@@ -172,7 +173,8 @@ let solicitudes: Solicitud[] = [
   {
     id: "sol-2",
     publicacionId: "pub-1",
-    comprador: "Restaurante Sumaq",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 300,
     precioOfrecido: 2.8,
     mensaje: "Compra semanal recurrente si la calidad se mantiene.",
@@ -205,7 +207,8 @@ let ventas: Venta[] = [
   {
     id: "ven-2",
     publicacionId: "pub-1",
-    comprador: "Restaurante Sumaq",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 300,
     precio: 2.8,
     fecha: "2026-07-31",
@@ -325,6 +328,7 @@ export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
         id: `ven-${Date.now()}`,
         publicacionId: sol.publicacionId,
         comprador: sol.comprador,
+        compradorEmail: sol.compradorEmail,
         cantidad: sol.cantidad,
         precio: sol.precioOfrecido,
         fecha: new Date().toISOString().slice(0, 10),

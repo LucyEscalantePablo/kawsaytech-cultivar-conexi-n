@@ -119,7 +119,7 @@ function Auth() {
                 <Label htmlFor="pass">Contraseña</Label>
                 <Input id="pass" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 rounded-xl" />
               </div>
-              <Button size="lg" className="h-13 w-full rounded-2xl text-base" onClick={login}>
+              <Button size="lg" className="h-14 w-full rounded-2xl text-base" onClick={login}>
                 Iniciar sesión <ArrowRight className="ml-2 size-5" />
               </Button>
             </TabsContent>
@@ -155,7 +155,7 @@ function Auth() {
                   ))}
                 </RadioGroup>
               </div>
-              <Button size="lg" className="h-13 w-full rounded-2xl text-base" onClick={signup}>
+              <Button size="lg" className="h-14 w-full rounded-2xl text-base" onClick={signup}>
                 Crear cuenta <ArrowRight className="ml-2 size-5" />
               </Button>
             </TabsContent>
