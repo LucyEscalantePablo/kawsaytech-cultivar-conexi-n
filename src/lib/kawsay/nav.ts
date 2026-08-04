@@ -12,7 +12,14 @@ import {
   Settings,
   HelpCircle,
   Layers,
+  Heart,
+  Inbox,
+  ShoppingBag,
+  Users,
+  Bell,
+  HandCoins,
 } from "lucide-react";
+import type { Rol } from "./auth";
 
 export interface NavItem {
   title: string;
@@ -21,30 +28,94 @@ export interface NavItem {
   proximamente?: boolean;
 }
 
-export const navPrincipal: NavItem[] = [
-  { title: "Inicio", url: "/", icon: Home },
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+export interface NavSectionDef {
+  label: string;
+  items: NavItem[];
+}
+
+const productor: NavSectionDef[] = [
+  {
+    label: "Panel",
+    items: [
+      { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+      { title: "Mis Cultivos", url: "/mis-cultivos", icon: Sprout },
+    ],
+  },
+  {
+    label: "Comercialización",
+    items: [
+      { title: "Comercialización", url: "/marketplace", icon: Store },
+      { title: "Publicar producto", url: "/publicar", icon: Sprout },
+      { title: "Mis Publicaciones", url: "/mis-publicaciones", icon: Layers },
+      { title: "Solicitudes Recibidas", url: "/solicitudes", icon: Inbox },
+      { title: "Ventas", url: "/historial", icon: HandCoins },
+      { title: "Estadísticas", url: "/estadisticas", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Próximos módulos",
+    items: [
+      { title: "Diagnóstico IA", url: "/diagnostico", icon: ScanEye, proximamente: true },
+      { title: "Fertilizantes", url: "/fertilizantes", icon: FlaskConical, proximamente: true },
+      { title: "Cuidados del Cultivo", url: "/cuidados", icon: Sprout, proximamente: true },
+      { title: "Alertas Climáticas", url: "/alertas", icon: CloudSun, proximamente: true },
+    ],
+  },
+  {
+    label: "Cuenta",
+    items: [
+      { title: "Perfil", url: "/perfil", icon: User },
+      { title: "Configuración", url: "/configuracion", icon: Settings },
+      { title: "Ayuda", url: "/ayuda", icon: HelpCircle },
+    ],
+  },
 ];
 
-export const navComercializacion: NavItem[] = [
-  { title: "Marketplace", url: "/marketplace", icon: Store },
-  { title: "Publicar producto", url: "/publicar", icon: Sprout },
-  { title: "Mis publicaciones", url: "/mis-publicaciones", icon: Layers },
-  { title: "Solicitudes", url: "/solicitudes", icon: HelpCircle },
-  { title: "Historial", url: "/historial", icon: BarChart3 },
+const comprador: NavSectionDef[] = [
+  {
+    label: "Explorar",
+    items: [
+      { title: "Inicio", url: "/comprador", icon: Home },
+      { title: "Marketplace", url: "/marketplace", icon: Store },
+      { title: "Favoritos", url: "/favoritos", icon: Heart },
+      { title: "Productores", url: "/productores", icon: Users },
+    ],
+  },
+  {
+    label: "Mis compras",
+    items: [
+      { title: "Mis Solicitudes", url: "/mis-solicitudes", icon: Inbox },
+      { title: "Mis Compras", url: "/mis-compras", icon: ShoppingBag },
+      { title: "Notificaciones", url: "/notificaciones", icon: Bell },
+    ],
+  },
+  {
+    label: "Cuenta",
+    items: [
+      { title: "Perfil", url: "/perfil", icon: User },
+      { title: "Configuración", url: "/configuracion", icon: Settings },
+      { title: "Ayuda", url: "/ayuda", icon: HelpCircle },
+    ],
+  },
 ];
 
-export const navFuturos: NavItem[] = [
-  { title: "Diagnóstico IA", url: "/diagnostico", icon: ScanEye, proximamente: true },
-  { title: "Fertilizantes", url: "/fertilizantes", icon: FlaskConical, proximamente: true },
-  { title: "Cuidados del cultivo", url: "/cuidados", icon: Sprout, proximamente: true },
-  { title: "Alertas climáticas", url: "/alertas", icon: CloudSun, proximamente: true },
-  { title: "Estadísticas", url: "/estadisticas", icon: BarChart3, proximamente: true },
+const admin: NavSectionDef[] = [
+  {
+    label: "Administración",
+    items: [
+      { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+      { title: "Arquitectura", url: "/arquitectura", icon: Layers },
+    ],
+  },
+  ...productor.slice(1),
+  {
+    label: "Vista comprador",
+    items: comprador[1]!.items,
+  },
 ];
 
-export const navCuenta: NavItem[] = [
-  { title: "Perfil", url: "/perfil", icon: User },
-  { title: "Configuración", url: "/configuracion", icon: Settings },
-  { title: "Ayuda", url: "/ayuda", icon: HelpCircle },
-  { title: "Arquitectura", url: "/arquitectura", icon: Layers },
-];
+export function navPorRol(rol: Rol): NavSectionDef[] {
+  if (rol === "COMPRADOR") return comprador;
+  if (rol === "ADMINISTRADOR") return admin;
+  return productor;
+}
