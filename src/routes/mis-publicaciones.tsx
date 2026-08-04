@@ -29,6 +29,7 @@ export const Route = createFileRoute("/mis-publicaciones")({
 
 function MisPublicaciones() {
   const { publicaciones } = useKawsayData();
+  const { usuario } = useAuth();
   const agId = usuario?.agricultorId ?? "ag-1";
   const mias = publicaciones.filter((p) => p.agricultorId === agId);
 
@@ -36,6 +37,7 @@ function MisPublicaciones() {
     <AppShell
       title="Mis publicaciones"
       subtitle={`${mias.length} publicaciones`}
+      roles={["PRODUCTOR"]}
       action={
         <Button asChild size="lg" className="rounded-xl">
           <Link to="/publicar"><Plus className="mr-1 size-5" /> Nueva</Link>
