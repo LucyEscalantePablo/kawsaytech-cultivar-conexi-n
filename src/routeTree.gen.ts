@@ -25,9 +25,12 @@ import { Route as FertilizantesRouteImport } from './routes/fertilizantes'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MisComprasRouteImport } from './routes/mis-compras'
+import { Route as MisCultivosRouteImport } from './routes/mis-cultivos'
 import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
 import { Route as MisSolicitudesRouteImport } from './routes/mis-solicitudes'
+import { Route as NotificacionesRouteImport } from './routes/notificaciones'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as ProductoresRouteImport } from './routes/productores'
 import { Route as PublicarRouteImport } from './routes/publicar'
 import { Route as SolicitudesRouteImport } from './routes/solicitudes'
 import { Route as ProductoIdRouteImport } from './routes/producto.$id'
@@ -112,6 +115,11 @@ const MisComprasRoute = MisComprasRouteImport.update({
   path: '/mis-compras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MisCultivosRoute = MisCultivosRouteImport.update({
+  id: '/mis-cultivos',
+  path: '/mis-cultivos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MisPublicacionesRoute = MisPublicacionesRouteImport.update({
   id: '/mis-publicaciones',
   path: '/mis-publicaciones',
@@ -122,9 +130,19 @@ const MisSolicitudesRoute = MisSolicitudesRouteImport.update({
   path: '/mis-solicitudes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificacionesRoute = NotificacionesRouteImport.update({
+  id: '/notificaciones',
+  path: '/notificaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductoresRoute = ProductoresRouteImport.update({
+  id: '/productores',
+  path: '/productores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicarRoute = PublicarRouteImport.update({
@@ -160,9 +178,12 @@ export interface FileRoutesByFullPath {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-compras': typeof MisComprasRoute
+  '/mis-cultivos': typeof MisCultivosRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/mis-solicitudes': typeof MisSolicitudesRoute
+  '/notificaciones': typeof NotificacionesRoute
   '/perfil': typeof PerfilRoute
+  '/productores': typeof ProductoresRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -184,9 +205,12 @@ export interface FileRoutesByTo {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-compras': typeof MisComprasRoute
+  '/mis-cultivos': typeof MisCultivosRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/mis-solicitudes': typeof MisSolicitudesRoute
+  '/notificaciones': typeof NotificacionesRoute
   '/perfil': typeof PerfilRoute
+  '/productores': typeof ProductoresRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -209,9 +233,12 @@ export interface FileRoutesById {
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
   '/mis-compras': typeof MisComprasRoute
+  '/mis-cultivos': typeof MisCultivosRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
   '/mis-solicitudes': typeof MisSolicitudesRoute
+  '/notificaciones': typeof NotificacionesRoute
   '/perfil': typeof PerfilRoute
+  '/productores': typeof ProductoresRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
   '/producto/$id': typeof ProductoIdRoute
@@ -235,9 +262,12 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-compras'
+    | '/mis-cultivos'
     | '/mis-publicaciones'
     | '/mis-solicitudes'
+    | '/notificaciones'
     | '/perfil'
+    | '/productores'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -259,9 +289,12 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-compras'
+    | '/mis-cultivos'
     | '/mis-publicaciones'
     | '/mis-solicitudes'
+    | '/notificaciones'
     | '/perfil'
+    | '/productores'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -283,9 +316,12 @@ export interface FileRouteTypes {
     | '/historial'
     | '/marketplace'
     | '/mis-compras'
+    | '/mis-cultivos'
     | '/mis-publicaciones'
     | '/mis-solicitudes'
+    | '/notificaciones'
     | '/perfil'
+    | '/productores'
     | '/publicar'
     | '/solicitudes'
     | '/producto/$id'
@@ -308,9 +344,12 @@ export interface RootRouteChildren {
   HistorialRoute: typeof HistorialRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MisComprasRoute: typeof MisComprasRoute
+  MisCultivosRoute: typeof MisCultivosRoute
   MisPublicacionesRoute: typeof MisPublicacionesRoute
   MisSolicitudesRoute: typeof MisSolicitudesRoute
+  NotificacionesRoute: typeof NotificacionesRoute
   PerfilRoute: typeof PerfilRoute
+  ProductoresRoute: typeof ProductoresRoute
   PublicarRoute: typeof PublicarRoute
   SolicitudesRoute: typeof SolicitudesRoute
   ProductoIdRoute: typeof ProductoIdRoute
@@ -430,6 +469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MisComprasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mis-cultivos': {
+      id: '/mis-cultivos'
+      path: '/mis-cultivos'
+      fullPath: '/mis-cultivos'
+      preLoaderRoute: typeof MisCultivosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mis-publicaciones': {
       id: '/mis-publicaciones'
       path: '/mis-publicaciones'
@@ -444,11 +490,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MisSolicitudesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notificaciones': {
+      id: '/notificaciones'
+      path: '/notificaciones'
+      fullPath: '/notificaciones'
+      preLoaderRoute: typeof NotificacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/perfil': {
       id: '/perfil'
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/productores': {
+      id: '/productores'
+      path: '/productores'
+      fullPath: '/productores'
+      preLoaderRoute: typeof ProductoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/publicar': {
@@ -492,9 +552,12 @@ const rootRouteChildren: RootRouteChildren = {
   HistorialRoute: HistorialRoute,
   MarketplaceRoute: MarketplaceRoute,
   MisComprasRoute: MisComprasRoute,
+  MisCultivosRoute: MisCultivosRoute,
   MisPublicacionesRoute: MisPublicacionesRoute,
   MisSolicitudesRoute: MisSolicitudesRoute,
+  NotificacionesRoute: NotificacionesRoute,
   PerfilRoute: PerfilRoute,
+  ProductoresRoute: ProductoresRoute,
   PublicarRoute: PublicarRoute,
   SolicitudesRoute: SolicitudesRoute,
   ProductoIdRoute: ProductoIdRoute,
