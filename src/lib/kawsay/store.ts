@@ -37,7 +37,7 @@ export const REGIONES = [
 
 export const AGRICULTOR_ACTUAL = "ag-1";
 
-export const agricultores: Agricultor[] = [
+export let agricultores: Agricultor[] = [
   {
     id: "ag-1",
     nombre: "Julián Quispe",
@@ -161,7 +161,8 @@ let solicitudes: Solicitud[] = [
   {
     id: "sol-1",
     publicacionId: "pub-1",
-    comprador: "Mercado Mayorista Santa Anita",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 1200,
     precioOfrecido: 2.45,
     mensaje: "Necesitamos entrega en dos camionadas, pagamos al contado en chacra.",
@@ -172,7 +173,8 @@ let solicitudes: Solicitud[] = [
   {
     id: "sol-2",
     publicacionId: "pub-1",
-    comprador: "Restaurante Sumaq",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 300,
     precioOfrecido: 2.8,
     mensaje: "Compra semanal recurrente si la calidad se mantiene.",
@@ -205,7 +207,8 @@ let ventas: Venta[] = [
   {
     id: "ven-2",
     publicacionId: "pub-1",
-    comprador: "Restaurante Sumaq",
+    comprador: "Mercado Santa Anita",
+    compradorEmail: "comprador@kawsaytech.pe",
     cantidad: 300,
     precio: 2.8,
     fecha: "2026-07-31",
@@ -240,14 +243,43 @@ export const getAgricultor = (id: string) =>
 
 export const getPublicacion = (id: string) => publicaciones.find((p) => p.id === id);
 
+/** Crea (o reutiliza) la ficha de agricultor de un productor registrado. */
+export function registrarAgricultor({
+  id,
+  nombre,
+  region = "Perú",
+}: {
+  id: string;
+  nombre: string;
+  region?: string;
+}) {
+  if (agricultores.some((a) => a.id === id)) return;
+  agricultores = [
+    ...agricultores,
+    {
+      id,
+      nombre,
+      region,
+      telefono: "+51 900 000 000",
+      calificacion: 5,
+      ventas: 0,
+      avatarColor: "bg-primary",
+    },
+  ];
+  emit();
+}
+
 export function crearPublicacion(
-  data: Omit<Publicacion, "id" | "creada" | "agricultorId" | "imagenes"> & { imagenes?: string[] },
+  data: Omit<Publicacion, "id" | "creada" | "agricultorId" | "imagenes"> & {
+    imagenes?: string[];
+    agricultorId?: string;
+  },
 ) {
   const nueva: Publicacion = {
     ...data,
     imagenes: data.imagenes?.length ? data.imagenes : IMAGENES[data.cultivo],
     id: `pub-${Date.now()}`,
-    agricultorId: AGRICULTOR_ACTUAL,
+    agricultorId: data.agricultorId ?? AGRICULTOR_ACTUAL,
     creada: new Date().toISOString().slice(0, 10),
   };
   publicaciones = [nueva, ...publicaciones];
@@ -296,6 +328,7 @@ export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
         id: `ven-${Date.now()}`,
         publicacionId: sol.publicacionId,
         comprador: sol.comprador,
+        compradorEmail: sol.compradorEmail ?? "",
         cantidad: sol.cantidad,
         precio: sol.precioOfrecido,
         fecha: new Date().toISOString().slice(0, 10),

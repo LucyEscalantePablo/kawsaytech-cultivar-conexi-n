@@ -1,6 +1,6 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Leaf, Bell } from "lucide-react";
-import type { ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Leaf, Bell, LogOut } from "lucide-react";
+import { useEffect, type ReactNode } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { navComercializacion, navCuenta, navFuturos, navPrincipal, type NavItem } from "@/lib/kawsay/nav";
+import { navPorRol, type NavItem } from "@/lib/kawsay/nav";
+import { cerrarSesion, inicioSegunRol, rolLabel, useAuth, type Rol } from "@/lib/kawsay/auth";
 
 function NavSection({ label, items }: { label: string; items: NavItem[] }) {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -57,6 +58,16 @@ function NavSection({ label, items }: { label: string; items: NavItem[] }) {
 }
 
 function KawsaySidebar() {
+  const { usuario, rol } = useAuth();
+  const navigate = useNavigate();
+  const secciones = navPorRol(rol ?? "PRODUCTOR");
+  const iniciales = (usuario?.nombre ?? "KT")
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-3 py-4">
@@ -66,26 +77,38 @@ function KawsaySidebar() {
           </span>
           <span className="grid group-data-[collapsible=icon]:hidden">
             <span className="font-display text-base font-extrabold leading-none">KawsayTech</span>
-            <span className="text-xs text-muted-foreground">Agro inteligente</span>
+            <span className="text-xs text-muted-foreground">
+              {rol ? rolLabel[rol] : "Agro inteligente"}
+            </span>
           </span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <NavSection label="General" items={navPrincipal} />
-        <NavSection label="Comercialización" items={navComercializacion} />
-        <NavSection label="Próximos módulos" items={navFuturos} />
-        <NavSection label="Cuenta" items={navCuenta} />
+        {secciones.map((s) => (
+          <NavSection key={s.label} label={s.label} items={s.items} />
+        ))}
       </SidebarContent>
-      <SidebarFooter className="p-3">
+      <SidebarFooter className="gap-2 p-3">
         <div className="flex items-center gap-3 rounded-xl bg-accent/60 p-2">
           <Avatar className="size-9">
-            <AvatarFallback className="bg-primary text-primary-foreground">JQ</AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground">{iniciales}</AvatarFallback>
           </Avatar>
-          <div className="grid text-xs group-data-[collapsible=icon]:hidden">
-            <span className="font-semibold">Julián Quispe</span>
-            <span className="text-muted-foreground">Agricultor · Huánuco</span>
+          <div className="grid min-w-0 text-xs group-data-[collapsible=icon]:hidden">
+            <span className="truncate font-semibold">{usuario?.nombre ?? "Invitado"}</span>
+            <span className="truncate text-muted-foreground">{usuario?.email ?? ""}</span>
           </div>
         </div>
+        <Button
+          variant="ghost"
+          className="h-11 w-full justify-start gap-3 rounded-xl text-[0.95rem]"
+          onClick={() => {
+            cerrarSesion();
+            navigate({ to: "/", replace: true });
+          }}
+        >
+          <LogOut className="size-5 shrink-0" />
+          <span className="group-data-[collapsible=icon]:hidden">Cerrar sesión</span>
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );
@@ -95,13 +118,41 @@ export function AppShell({
   title,
   subtitle,
   action,
+  roles,
   children,
 }: {
   title: string;
   subtitle?: string;
   action?: ReactNode;
+  /** Roles autorizados a ver la pantalla. Por defecto, cualquier usuario autenticado. */
+  roles?: Rol[];
   children: ReactNode;
 }) {
+  const { cargando, usuario, rol } = useAuth();
+  const navigate = useNavigate();
+  const autorizado = !!rol && (!roles || roles.includes(rol) || rol === "ADMINISTRADOR");
+
+  useEffect(() => {
+    if (cargando) return;
+    if (!usuario) {
+      navigate({ to: "/auth", replace: true });
+      return;
+    }
+    if (!autorizado && rol) {
+      navigate({ to: inicioSegunRol(rol), replace: true });
+    }
+  }, [cargando, usuario, autorizado, rol, navigate]);
+
+  if (cargando || !usuario || !autorizado) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <span className="gradient-field flex size-12 animate-pulse items-center justify-center rounded-2xl">
+          <Leaf className="size-6 text-primary-foreground" />
+        </span>
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
@@ -113,9 +164,11 @@ export function AppShell({
               <h1 className="truncate font-display text-xl font-extrabold md:text-2xl">{title}</h1>
               {subtitle && <p className="truncate text-sm text-muted-foreground">{subtitle}</p>}
             </div>
-            <Button variant="ghost" size="icon" className="relative size-9 rounded-full" aria-label="Notificaciones">
-              <Bell className="size-5" />
-              <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-harvest" />
+            <Button variant="ghost" size="icon" className="relative size-9 rounded-full" aria-label="Notificaciones" asChild>
+              <Link to={rol === "COMPRADOR" ? "/notificaciones" : "/solicitudes"}>
+                <Bell className="size-5" />
+                <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-harvest" />
+              </Link>
             </Button>
             {action}
           </header>

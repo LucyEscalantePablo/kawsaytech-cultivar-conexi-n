@@ -71,7 +71,7 @@ function Publicar() {
   };
 
   return (
-    <AppShell title="Publicar producto" subtitle="Solo 3 pasos: producto, precio y fotos">
+    <AppShell roles={["PRODUCTOR"]} title="Publicar producto" subtitle="Solo 3 pasos: producto, precio y fotos">
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <Card className="gap-6 rounded-3xl p-6 shadow-soft md:p-8">
           <div className="grid gap-5 md:grid-cols-2">

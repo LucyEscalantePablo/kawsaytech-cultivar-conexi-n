@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Star, MapPin, Phone, BadgeCheck, Package } from "lucide-react";
+import { useAuth } from "@/lib/kawsay/auth";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ProductCard } from "@/components/kawsay/ProductCard";
-import { AGRICULTOR_ACTUAL, getAgricultor, useKawsayData } from "@/lib/kawsay/store";
+import { getAgricultor, useKawsayData } from "@/lib/kawsay/store";
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -23,9 +24,11 @@ export const Route = createFileRoute("/perfil")({
 });
 
 function Perfil() {
-  const ag = getAgricultor(AGRICULTOR_ACTUAL);
+  const { usuario } = useAuth();
+  const agId = usuario?.agricultorId ?? "ag-1";
+  const ag = getAgricultor(agId);
   const { publicaciones } = useKawsayData();
-  const mias = publicaciones.filter((p) => p.agricultorId === AGRICULTOR_ACTUAL && p.estado === "activa");
+  const mias = publicaciones.filter((p) => p.agricultorId === agId && p.estado === "activa");
 
   return (
     <AppShell title="Mi perfil" subtitle="Agricultor verificado">

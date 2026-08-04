@@ -1,24 +1,24 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Check, X, CalendarDays, User } from "lucide-react";
-import { toast } from "sonner";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CalendarDays, Inbox } from "lucide-react";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CULTIVOS, getPublicacion, responderSolicitud, soles, useKawsayData } from "@/lib/kawsay/store";
+import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
+import { useAuth } from "@/lib/kawsay/auth";
 import type { Solicitud } from "@/lib/kawsay/types";
 
-export const Route = createFileRoute("/solicitudes")({
+export const Route = createFileRoute("/mis-solicitudes")({
   head: () => ({
     meta: [
-      { title: "Solicitudes de compra · KawsayTech" },
-      { name: "description", content: "Revisa las solicitudes de compra recibidas: cantidad, precio ofrecido, mensaje y fecha requerida." },
-      { property: "og:title", content: "Solicitudes de compra · KawsayTech" },
-      { property: "og:description", content: "Acepta o rechaza ofertas de compradores en un clic." },
+      { title: "Mis solicitudes de compra · KawsayTech" },
+      { name: "description", content: "Sigue el estado de las ofertas que enviaste a los productores: pendientes, aceptadas y rechazadas." },
+      { property: "og:title", content: "Mis solicitudes de compra · KawsayTech" },
+      { property: "og:description", content: "Cantidad, precio ofrecido y fecha requerida de cada oferta." },
     ],
   }),
-  component: Solicitudes,
+  component: MisSolicitudes,
 });
 
 function Fila({ s }: { s: Solicitud }) {
@@ -27,11 +27,11 @@ function Fila({ s }: { s: Solicitud }) {
     <Card className="gap-4 rounded-3xl p-6 shadow-soft">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="flex items-center gap-2 font-display text-lg font-bold">
-            <User className="size-5 text-primary" /> {s.comprador}
+          <p className="font-display text-lg font-bold">
+            {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"}
           </p>
           <p className="text-sm text-muted-foreground">
-            {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"} · solicitado el {s.creada}
+            {pub ? `${pub.distrito}, ${pub.region}` : "—"} · enviada el {s.creada}
           </p>
         </div>
         <Badge variant="outline" className="rounded-full capitalize">{s.estado}</Badge>
@@ -51,30 +51,27 @@ function Fila({ s }: { s: Solicitud }) {
         </div>
       </div>
       {s.mensaje && <p className="rounded-2xl bg-muted/60 p-4 text-sm text-muted-foreground">“{s.mensaje}”</p>}
-      {s.estado === "pendiente" && (
-        <div className="flex flex-wrap gap-3">
-          <Button size="lg" className="h-12 rounded-xl" onClick={() => { responderSolicitud(s.id, "aceptada"); toast.success("Solicitud aceptada y venta registrada"); }}>
-            <Check className="mr-1 size-5" /> Aceptar
-          </Button>
-          <Button size="lg" variant="secondary" className="h-12 rounded-xl" onClick={() => { responderSolicitud(s.id, "rechazada"); toast("Solicitud rechazada"); }}>
-            <X className="mr-1 size-5" /> Rechazar
-          </Button>
-        </div>
+      {pub && (
+        <Button asChild variant="secondary" className="w-fit rounded-xl">
+          <Link to="/producto/$id" params={{ id: pub.id }}>Ver publicación</Link>
+        </Button>
       )}
     </Card>
   );
 }
 
-function Solicitudes() {
+function MisSolicitudes() {
   const { solicitudes } = useKawsayData();
+  const { usuario } = useAuth();
+  const mias = solicitudes.filter((s) => s.compradorEmail === usuario?.email);
   const grupos = {
-    pendiente: solicitudes.filter((s) => s.estado === "pendiente"),
-    aceptada: solicitudes.filter((s) => s.estado === "aceptada"),
-    rechazada: solicitudes.filter((s) => s.estado === "rechazada"),
+    pendiente: mias.filter((s) => s.estado === "pendiente"),
+    aceptada: mias.filter((s) => s.estado === "aceptada"),
+    rechazada: mias.filter((s) => s.estado === "rechazada"),
   };
 
   return (
-    <AppShell roles={["PRODUCTOR"]} title="Solicitudes de compra" subtitle={`${grupos.pendiente.length} pendientes de respuesta`}>
+    <AppShell title="Mis solicitudes" subtitle={`${grupos.pendiente.length} esperando respuesta`} roles={["COMPRADOR"]}>
       <Tabs defaultValue="pendiente">
         <TabsList className="h-12 rounded-2xl">
           <TabsTrigger value="pendiente" className="rounded-xl px-5">Pendientes</TabsTrigger>
@@ -87,8 +84,12 @@ function Solicitudes() {
               <Fila key={s.id} s={s} />
             ))}
             {grupos[k].length === 0 && (
-              <Card className="items-center rounded-3xl p-12 text-center shadow-none">
+              <Card className="items-center gap-3 rounded-3xl p-12 text-center shadow-none">
+                <Inbox className="size-9 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">No hay solicitudes en esta bandeja.</p>
+                <Button asChild className="rounded-xl">
+                  <Link to="/marketplace">Buscar productos</Link>
+                </Button>
               </Card>
             )}
           </TabsContent>

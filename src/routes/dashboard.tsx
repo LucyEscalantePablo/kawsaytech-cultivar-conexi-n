@@ -9,12 +9,13 @@ import {
   Store,
   Layers,
 } from "lucide-react";
+import { useAuth } from "@/lib/kawsay/auth";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { StatCard } from "@/components/kawsay/StatCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AGRICULTOR_ACTUAL, CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
+import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -30,7 +31,9 @@ export const Route = createFileRoute("/dashboard")({
 
 function Dashboard() {
   const { publicaciones, solicitudes, ventas } = useKawsayData();
-  const mias = publicaciones.filter((p) => p.agricultorId === AGRICULTOR_ACTUAL);
+  const { usuario } = useAuth();
+  const agId = usuario?.agricultorId ?? "ag-1";
+  const mias = publicaciones.filter((p) => p.agricultorId === agId);
   const misIds = new Set(mias.map((p) => p.id));
   const misSolicitudes = solicitudes.filter((s) => misIds.has(s.publicacionId));
   const misVentas = ventas.filter((v) => misIds.has(v.publicacionId));
@@ -42,6 +45,7 @@ function Dashboard() {
     <AppShell
       title="Dashboard comercial"
       subtitle="Campaña 2026 · Papa y Palta"
+      roles={["PRODUCTOR"]}
       action={
         <Button asChild size="lg" className="rounded-xl">
           <Link to="/publicar">
