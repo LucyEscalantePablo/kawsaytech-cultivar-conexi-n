@@ -74,7 +74,7 @@ function Solicitudes() {
   };
 
   return (
-    <AppShell title="Solicitudes de compra" subtitle={`${grupos.pendiente.length} pendientes de respuesta`}>
+    <AppShell roles={["PRODUCTOR"]} title="Solicitudes de compra" subtitle={`${grupos.pendiente.length} pendientes de respuesta`}>
       <Tabs defaultValue="pendiente">
         <TabsList className="h-12 rounded-2xl">
           <TabsTrigger value="pendiente" className="rounded-xl px-5">Pendientes</TabsTrigger>

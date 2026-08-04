@@ -328,7 +328,7 @@ export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
         id: `ven-${Date.now()}`,
         publicacionId: sol.publicacionId,
         comprador: sol.comprador,
-        compradorEmail: sol.compradorEmail,
+        compradorEmail: sol.compradorEmail ?? "",
         cantidad: sol.cantidad,
         precio: sol.precioOfrecido,
         fecha: new Date().toISOString().slice(0, 10),

@@ -26,7 +26,7 @@ function Historial() {
   const vendidas = publicaciones.filter((p) => p.estado === "vendida");
 
   return (
-    <AppShell title="Historial" subtitle="Campaña 2026">
+    <AppShell roles={["PRODUCTOR"]} title="Historial" subtitle="Campaña 2026">
       <div className="space-y-8">
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard icon={HandCoins} label="Ingresos" value={soles(ingresos)} tone="success" />
