@@ -1,6 +1,21 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, MapPin, Phone, Star, CalendarDays, Package, BadgeCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPin,
+  Phone,
+  Star,
+  CalendarDays,
+  Package,
+  BadgeCheck,
+  Pencil,
+  BarChart3,
+  Inbox,
+  PauseCircle,
+  CheckCircle2,
+  Trash2,
+  Heart,
+} from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -21,11 +36,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   CULTIVOS,
+  actualizarEstado,
   crearSolicitud,
+  eliminarPublicacion,
   getAgricultor,
   soles,
   useKawsayData,
 } from "@/lib/kawsay/store";
+import { alternarFavorito, useAuth } from "@/lib/kawsay/auth";
+
 
 export const Route = createFileRoute("/producto/$id")({
   head: () => ({
