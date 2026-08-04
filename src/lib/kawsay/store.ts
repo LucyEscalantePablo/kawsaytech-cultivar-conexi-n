@@ -37,7 +37,7 @@ export const REGIONES = [
 
 export const AGRICULTOR_ACTUAL = "ag-1";
 
-export const agricultores: Agricultor[] = [
+export let agricultores: Agricultor[] = [
   {
     id: "ag-1",
     nombre: "Julián Quispe",
@@ -240,14 +240,43 @@ export const getAgricultor = (id: string) =>
 
 export const getPublicacion = (id: string) => publicaciones.find((p) => p.id === id);
 
+/** Crea (o reutiliza) la ficha de agricultor de un productor registrado. */
+export function registrarAgricultor({
+  id,
+  nombre,
+  region = "Perú",
+}: {
+  id: string;
+  nombre: string;
+  region?: string;
+}) {
+  if (agricultores.some((a) => a.id === id)) return;
+  agricultores = [
+    ...agricultores,
+    {
+      id,
+      nombre,
+      region,
+      telefono: "+51 900 000 000",
+      calificacion: 5,
+      ventas: 0,
+      avatarColor: "bg-primary",
+    },
+  ];
+  emit();
+}
+
 export function crearPublicacion(
-  data: Omit<Publicacion, "id" | "creada" | "agricultorId" | "imagenes"> & { imagenes?: string[] },
+  data: Omit<Publicacion, "id" | "creada" | "agricultorId" | "imagenes"> & {
+    imagenes?: string[];
+    agricultorId?: string;
+  },
 ) {
   const nueva: Publicacion = {
     ...data,
     imagenes: data.imagenes?.length ? data.imagenes : IMAGENES[data.cultivo],
     id: `pub-${Date.now()}`,
-    agricultorId: AGRICULTOR_ACTUAL,
+    agricultorId: data.agricultorId ?? AGRICULTOR_ACTUAL,
     creada: new Date().toISOString().slice(0, 10),
   };
   publicaciones = [nueva, ...publicaciones];
