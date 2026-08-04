@@ -60,7 +60,9 @@ export const Route = createFileRoute("/producto/$id")({
 
 function DetalleProducto() {
   const { id } = useParams({ from: "/producto/$id" });
-  const { publicaciones } = useKawsayData();
+  const { publicaciones, solicitudes } = useKawsayData();
+  const { usuario, rol, favoritos } = useAuth();
+  const navigate = useNavigate();
   const pub = publicaciones.find((p) => p.id === id);
   const [img, setImg] = useState(0);
   const [cantidad, setCantidad] = useState("");
@@ -80,6 +82,10 @@ function DetalleProducto() {
   }
 
   const ag = getAgricultor(pub.agricultorId);
+  const esPropietario =
+    rol !== "COMPRADOR" && !!usuario?.agricultorId && usuario.agricultorId === pub.agricultorId;
+  const solicitudesPub = solicitudes.filter((s) => s.publicacionId === pub.id);
+  const esFavorito = favoritos.includes(pub.id);
 
   const enviar = () => {
     const cant = Number(cantidad);
@@ -94,7 +100,8 @@ function DetalleProducto() {
     }
     crearSolicitud({
       publicacionId: pub.id,
-      comprador: "Comprador demo",
+      comprador: usuario?.nombre ?? "Comprador",
+      compradorEmail: usuario?.email,
       cantidad: cant,
       precioOfrecido: prec,
       mensaje: mensaje.slice(0, 500),
@@ -106,6 +113,7 @@ function DetalleProducto() {
     setMensaje("");
     toast.success("Solicitud enviada al agricultor");
   };
+
 
   return (
     <AppShell title={`${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}`} subtitle={`${pub.distrito}, ${pub.region}`}>
