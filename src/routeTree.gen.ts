@@ -14,15 +14,19 @@ import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as ArquitecturaRouteImport } from './routes/arquitectura'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AyudaRouteImport } from './routes/ayuda'
+import { Route as CompradorRouteImport } from './routes/comprador'
 import { Route as ConfiguracionRouteImport } from './routes/configuracion'
 import { Route as CuidadosRouteImport } from './routes/cuidados'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DiagnosticoRouteImport } from './routes/diagnostico'
 import { Route as EstadisticasRouteImport } from './routes/estadisticas'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as FertilizantesRouteImport } from './routes/fertilizantes'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MisComprasRouteImport } from './routes/mis-compras'
 import { Route as MisPublicacionesRouteImport } from './routes/mis-publicaciones'
+import { Route as MisSolicitudesRouteImport } from './routes/mis-solicitudes'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PublicarRouteImport } from './routes/publicar'
 import { Route as SolicitudesRouteImport } from './routes/solicitudes'
@@ -53,6 +57,11 @@ const AyudaRoute = AyudaRouteImport.update({
   path: '/ayuda',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompradorRoute = CompradorRouteImport.update({
+  id: '/comprador',
+  path: '/comprador',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConfiguracionRoute = ConfiguracionRouteImport.update({
   id: '/configuracion',
   path: '/configuracion',
@@ -78,6 +87,11 @@ const EstadisticasRoute = EstadisticasRouteImport.update({
   path: '/estadisticas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FertilizantesRoute = FertilizantesRouteImport.update({
   id: '/fertilizantes',
   path: '/fertilizantes',
@@ -93,9 +107,19 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
   path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MisComprasRoute = MisComprasRouteImport.update({
+  id: '/mis-compras',
+  path: '/mis-compras',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MisPublicacionesRoute = MisPublicacionesRouteImport.update({
   id: '/mis-publicaciones',
   path: '/mis-publicaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MisSolicitudesRoute = MisSolicitudesRouteImport.update({
+  id: '/mis-solicitudes',
+  path: '/mis-solicitudes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -125,15 +149,19 @@ export interface FileRoutesByFullPath {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/favoritos': typeof FavoritosRoute
   '/fertilizantes': typeof FertilizantesRoute
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-compras': typeof MisComprasRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/mis-solicitudes': typeof MisSolicitudesRoute
   '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
@@ -145,15 +173,19 @@ export interface FileRoutesByTo {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/favoritos': typeof FavoritosRoute
   '/fertilizantes': typeof FertilizantesRoute
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-compras': typeof MisComprasRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/mis-solicitudes': typeof MisSolicitudesRoute
   '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
@@ -166,15 +198,19 @@ export interface FileRoutesById {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
   '/dashboard': typeof DashboardRoute
   '/diagnostico': typeof DiagnosticoRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/favoritos': typeof FavoritosRoute
   '/fertilizantes': typeof FertilizantesRoute
   '/historial': typeof HistorialRoute
   '/marketplace': typeof MarketplaceRoute
+  '/mis-compras': typeof MisComprasRoute
   '/mis-publicaciones': typeof MisPublicacionesRoute
+  '/mis-solicitudes': typeof MisSolicitudesRoute
   '/perfil': typeof PerfilRoute
   '/publicar': typeof PublicarRoute
   '/solicitudes': typeof SolicitudesRoute
@@ -188,15 +224,19 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comprador'
     | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
     | '/estadisticas'
+    | '/favoritos'
     | '/fertilizantes'
     | '/historial'
     | '/marketplace'
+    | '/mis-compras'
     | '/mis-publicaciones'
+    | '/mis-solicitudes'
     | '/perfil'
     | '/publicar'
     | '/solicitudes'
@@ -208,15 +248,19 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comprador'
     | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
     | '/estadisticas'
+    | '/favoritos'
     | '/fertilizantes'
     | '/historial'
     | '/marketplace'
+    | '/mis-compras'
     | '/mis-publicaciones'
+    | '/mis-solicitudes'
     | '/perfil'
     | '/publicar'
     | '/solicitudes'
@@ -228,15 +272,19 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comprador'
     | '/configuracion'
     | '/cuidados'
     | '/dashboard'
     | '/diagnostico'
     | '/estadisticas'
+    | '/favoritos'
     | '/fertilizantes'
     | '/historial'
     | '/marketplace'
+    | '/mis-compras'
     | '/mis-publicaciones'
+    | '/mis-solicitudes'
     | '/perfil'
     | '/publicar'
     | '/solicitudes'
@@ -249,15 +297,19 @@ export interface RootRouteChildren {
   ArquitecturaRoute: typeof ArquitecturaRoute
   AuthRoute: typeof AuthRoute
   AyudaRoute: typeof AyudaRoute
+  CompradorRoute: typeof CompradorRoute
   ConfiguracionRoute: typeof ConfiguracionRoute
   CuidadosRoute: typeof CuidadosRoute
   DashboardRoute: typeof DashboardRoute
   DiagnosticoRoute: typeof DiagnosticoRoute
   EstadisticasRoute: typeof EstadisticasRoute
+  FavoritosRoute: typeof FavoritosRoute
   FertilizantesRoute: typeof FertilizantesRoute
   HistorialRoute: typeof HistorialRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MisComprasRoute: typeof MisComprasRoute
   MisPublicacionesRoute: typeof MisPublicacionesRoute
+  MisSolicitudesRoute: typeof MisSolicitudesRoute
   PerfilRoute: typeof PerfilRoute
   PublicarRoute: typeof PublicarRoute
   SolicitudesRoute: typeof SolicitudesRoute
@@ -301,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AyudaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comprador': {
+      id: '/comprador'
+      path: '/comprador'
+      fullPath: '/comprador'
+      preLoaderRoute: typeof CompradorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/configuracion': {
       id: '/configuracion'
       path: '/configuracion'
@@ -336,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstadisticasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fertilizantes': {
       id: '/fertilizantes'
       path: '/fertilizantes'
@@ -357,11 +423,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mis-compras': {
+      id: '/mis-compras'
+      path: '/mis-compras'
+      fullPath: '/mis-compras'
+      preLoaderRoute: typeof MisComprasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mis-publicaciones': {
       id: '/mis-publicaciones'
       path: '/mis-publicaciones'
       fullPath: '/mis-publicaciones'
       preLoaderRoute: typeof MisPublicacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mis-solicitudes': {
+      id: '/mis-solicitudes'
+      path: '/mis-solicitudes'
+      fullPath: '/mis-solicitudes'
+      preLoaderRoute: typeof MisSolicitudesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -401,15 +481,19 @@ const rootRouteChildren: RootRouteChildren = {
   ArquitecturaRoute: ArquitecturaRoute,
   AuthRoute: AuthRoute,
   AyudaRoute: AyudaRoute,
+  CompradorRoute: CompradorRoute,
   ConfiguracionRoute: ConfiguracionRoute,
   CuidadosRoute: CuidadosRoute,
   DashboardRoute: DashboardRoute,
   DiagnosticoRoute: DiagnosticoRoute,
   EstadisticasRoute: EstadisticasRoute,
+  FavoritosRoute: FavoritosRoute,
   FertilizantesRoute: FertilizantesRoute,
   HistorialRoute: HistorialRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MisComprasRoute: MisComprasRoute,
   MisPublicacionesRoute: MisPublicacionesRoute,
+  MisSolicitudesRoute: MisSolicitudesRoute,
   PerfilRoute: PerfilRoute,
   PublicarRoute: PublicarRoute,
   SolicitudesRoute: SolicitudesRoute,
