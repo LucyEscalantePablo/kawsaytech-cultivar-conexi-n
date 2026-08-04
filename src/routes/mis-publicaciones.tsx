@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Copy, Pause, Play, Pencil, Trash2, CheckCircle2, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/kawsay/auth";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  AGRICULTOR_ACTUAL,
   CULTIVOS,
   actualizarEstado,
   duplicarPublicacion,
@@ -29,7 +29,8 @@ export const Route = createFileRoute("/mis-publicaciones")({
 
 function MisPublicaciones() {
   const { publicaciones } = useKawsayData();
-  const mias = publicaciones.filter((p) => p.agricultorId === AGRICULTOR_ACTUAL);
+  const agId = usuario?.agricultorId ?? "ag-1";
+  const mias = publicaciones.filter((p) => p.agricultorId === agId);
 
   return (
     <AppShell
