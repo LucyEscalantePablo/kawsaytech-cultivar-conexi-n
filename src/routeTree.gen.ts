@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as ArquitecturaRouteImport } from './routes/arquitectura'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AyudaRouteImport } from './routes/ayuda'
 import { Route as ConfiguracionRouteImport } from './routes/configuracion'
 import { Route as CuidadosRouteImport } from './routes/cuidados'
@@ -40,6 +41,11 @@ const AlertasRoute = AlertasRouteImport.update({
 const ArquitecturaRoute = ArquitecturaRouteImport.update({
   id: '/arquitectura',
   path: '/arquitectura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AyudaRoute = AyudaRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/arquitectura': typeof ArquitecturaRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/arquitectura': typeof ArquitecturaRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/arquitectura': typeof ArquitecturaRoute
+  '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/arquitectura'
+    | '/auth'
     | '/ayuda'
     | '/configuracion'
     | '/cuidados'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/arquitectura'
+    | '/auth'
     | '/ayuda'
     | '/configuracion'
     | '/cuidados'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/arquitectura'
+    | '/auth'
     | '/ayuda'
     | '/configuracion'
     | '/cuidados'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertasRoute: typeof AlertasRoute
   ArquitecturaRoute: typeof ArquitecturaRoute
+  AuthRoute: typeof AuthRoute
   AyudaRoute: typeof AyudaRoute
   ConfiguracionRoute: typeof ConfiguracionRoute
   CuidadosRoute: typeof CuidadosRoute
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/arquitectura'
       fullPath: '/arquitectura'
       preLoaderRoute: typeof ArquitecturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ayuda': {
@@ -379,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertasRoute: AlertasRoute,
   ArquitecturaRoute: ArquitecturaRoute,
+  AuthRoute: AuthRoute,
   AyudaRoute: AyudaRoute,
   ConfiguracionRoute: ConfiguracionRoute,
   CuidadosRoute: CuidadosRoute,
