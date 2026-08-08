@@ -12,7 +12,6 @@ import {
   Smartphone,
   HandCoins,
   Users,
-  Quote,
   Mail,
   Phone,
   MapPin,
@@ -61,23 +60,6 @@ const beneficios = [
   { icon: Users, t: "Dos experiencias", d: "Panel del productor y panel del comprador, cada uno con sus herramientas." },
 ];
 
-const testimonios = [
-  {
-    n: "Julián Quispe",
-    r: "Productor de papa · Huánuco",
-    t: "Antes vendía al primer acopiador que llegaba. Ahora recibo tres o cuatro ofertas y elijo la mejor.",
-  },
-  {
-    n: "Rosa Ccahuana",
-    r: "Productora de palta · Cusco",
-    t: "Publiqué mi palta Fuerte y en dos días tenía una solicitud de una exportadora.",
-  },
-  {
-    n: "Mercado Santa Anita",
-    r: "Comprador mayorista · Lima",
-    t: "Filtro por región, calidad y cantidad. Encuentro volumen real y contacto directo con el productor.",
-  },
-];
 
 function Landing() {
   const { publicaciones } = useKawsayData();
@@ -269,22 +251,6 @@ function Landing() {
                 </div>
                 <h3 className="font-display text-lg font-bold">{m.titulo}</h3>
                 <p className="text-sm text-muted-foreground">{m.detalle}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="font-display text-3xl font-extrabold">Testimonios</h2>
-          <div className="grid gap-5 md:grid-cols-3">
-            {testimonios.map((t) => (
-              <Card key={t.n} className="gap-3 rounded-3xl p-6 shadow-soft">
-                <Quote className="size-7 text-primary" />
-                <p className="text-muted-foreground">“{t.t}”</p>
-                <div>
-                  <p className="font-display font-bold">{t.n}</p>
-                  <p className="text-sm text-muted-foreground">{t.r}</p>
-                </div>
               </Card>
             ))}
           </div>
