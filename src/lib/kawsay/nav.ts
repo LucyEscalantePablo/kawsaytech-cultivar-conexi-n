@@ -44,7 +44,8 @@ const productor: NavSectionDef[] = [
   {
     label: "Comercialización",
     items: [
-      { title: "Comercialización", url: "/marketplace", icon: Store },
+      { title: "Comercializar", url: "/comercializar", icon: HandCoins },
+      { title: "Marketplace", url: "/marketplace", icon: Store },
       { title: "Publicar producto", url: "/publicar", icon: Sprout },
       { title: "Mis Publicaciones", url: "/mis-publicaciones", icon: Layers },
       { title: "Solicitudes Recibidas", url: "/solicitudes", icon: Inbox },

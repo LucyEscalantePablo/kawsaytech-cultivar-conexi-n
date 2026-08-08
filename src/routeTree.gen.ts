@@ -14,6 +14,7 @@ import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as ArquitecturaRouteImport } from './routes/arquitectura'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AyudaRouteImport } from './routes/ayuda'
+import { Route as ComercializarRouteImport } from './routes/comercializar'
 import { Route as CompradorRouteImport } from './routes/comprador'
 import { Route as ConfiguracionRouteImport } from './routes/configuracion'
 import { Route as CuidadosRouteImport } from './routes/cuidados'
@@ -58,6 +59,11 @@ const AuthRoute = AuthRouteImport.update({
 const AyudaRoute = AyudaRouteImport.update({
   id: '/ayuda',
   path: '/ayuda',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComercializarRoute = ComercializarRouteImport.update({
+  id: '/comercializar',
+  path: '/comercializar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompradorRoute = CompradorRouteImport.update({
@@ -167,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comercializar': typeof ComercializarRoute
   '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByTo {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comercializar': typeof ComercializarRoute
   '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -222,6 +230,7 @@ export interface FileRoutesById {
   '/arquitectura': typeof ArquitecturaRoute
   '/auth': typeof AuthRoute
   '/ayuda': typeof AyudaRoute
+  '/comercializar': typeof ComercializarRoute
   '/comprador': typeof CompradorRoute
   '/configuracion': typeof ConfiguracionRoute
   '/cuidados': typeof CuidadosRoute
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comercializar'
     | '/comprador'
     | '/configuracion'
     | '/cuidados'
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comercializar'
     | '/comprador'
     | '/configuracion'
     | '/cuidados'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/arquitectura'
     | '/auth'
     | '/ayuda'
+    | '/comercializar'
     | '/comprador'
     | '/configuracion'
     | '/cuidados'
@@ -333,6 +345,7 @@ export interface RootRouteChildren {
   ArquitecturaRoute: typeof ArquitecturaRoute
   AuthRoute: typeof AuthRoute
   AyudaRoute: typeof AyudaRoute
+  ComercializarRoute: typeof ComercializarRoute
   CompradorRoute: typeof CompradorRoute
   ConfiguracionRoute: typeof ConfiguracionRoute
   CuidadosRoute: typeof CuidadosRoute
@@ -390,6 +403,13 @@ declare module '@tanstack/react-router' {
       path: '/ayuda'
       fullPath: '/ayuda'
       preLoaderRoute: typeof AyudaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comercializar': {
+      id: '/comercializar'
+      path: '/comercializar'
+      fullPath: '/comercializar'
+      preLoaderRoute: typeof ComercializarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comprador': {
@@ -541,6 +561,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArquitecturaRoute: ArquitecturaRoute,
   AuthRoute: AuthRoute,
   AyudaRoute: AyudaRoute,
+  ComercializarRoute: ComercializarRoute,
   CompradorRoute: CompradorRoute,
   ConfiguracionRoute: ConfiguracionRoute,
   CuidadosRoute: CuidadosRoute,
@@ -565,3 +586,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

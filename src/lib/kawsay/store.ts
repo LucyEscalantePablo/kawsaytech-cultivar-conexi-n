@@ -3,6 +3,8 @@ import papa from "@/assets/papa.jpg";
 import papa2 from "@/assets/papa-2.jpg";
 import palta from "@/assets/palta.jpg";
 import palta2 from "@/assets/palta-2.jpg";
+import papa3 from "@/assets/papa-3.jpg";
+import palta3 from "@/assets/palta-3.jpg";
 import type {
   Agricultor,
   CultivoId,
@@ -13,9 +15,16 @@ import type {
 } from "./types";
 
 export const IMAGENES: Record<CultivoId, string[]> = {
-  papa: [papa, papa2],
-  palta: [palta, palta2],
+  papa: [papa, papa2, papa3],
+  palta: [palta, palta2, palta3],
 };
+
+/** Rota las fotos del cultivo para que cada publicación tenga una portada distinta. */
+export function imagenesDe(cultivo: CultivoId, offset = 0): string[] {
+  const base = IMAGENES[cultivo];
+  const i = ((offset % base.length) + base.length) % base.length;
+  return [...base.slice(i), ...base.slice(0, i)];
+}
 
 export const CULTIVOS: Record<CultivoId, { nombre: string; variedades: string[] }> = {
   papa: {
@@ -277,7 +286,7 @@ export function crearPublicacion(
 ) {
   const nueva: Publicacion = {
     ...data,
-    imagenes: data.imagenes?.length ? data.imagenes : IMAGENES[data.cultivo],
+    imagenes: data.imagenes?.length ? data.imagenes : imagenesDe(data.cultivo, publicaciones.length),
     id: `pub-${Date.now()}`,
     agricultorId: data.agricultorId ?? AGRICULTOR_ACTUAL,
     creada: new Date().toISOString().slice(0, 10),
