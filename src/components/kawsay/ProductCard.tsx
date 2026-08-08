@@ -3,7 +3,7 @@ import { MapPin, Star, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CULTIVOS, getAgricultor, soles } from "@/lib/kawsay/store";
+import { CULTIVOS, getAgricultor, imagenesDe, soles } from "@/lib/kawsay/store";
 import type { Publicacion } from "@/lib/kawsay/types";
 
 export function ProductCard({ pub }: { pub: Publicacion }) {
@@ -13,7 +13,10 @@ export function ProductCard({ pub }: { pub: Publicacion }) {
     <Card className="group gap-0 overflow-hidden rounded-3xl border-border/70 p-0 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
-          src={pub.imagenes[0]}
+          src={pub.imagenes[0] ?? imagenesDe(pub.cultivo)[0]}
+          onError={(e) => {
+            e.currentTarget.src = imagenesDe(pub.cultivo)[0]!;
+          }}
           alt={`${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}`}
           loading="lazy"
           width={900}

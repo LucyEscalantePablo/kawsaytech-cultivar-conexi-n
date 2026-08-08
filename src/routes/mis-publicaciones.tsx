@@ -11,6 +11,7 @@ import {
   actualizarEstado,
   duplicarPublicacion,
   eliminarPublicacion,
+  imagenesDe,
   soles,
   useKawsayData,
 } from "@/lib/kawsay/store";
@@ -48,7 +49,7 @@ function MisPublicaciones() {
         {mias.map((p) => (
           <Card key={p.id} className="gap-0 overflow-hidden rounded-3xl p-0 shadow-soft">
             <div className="flex flex-col gap-5 p-5 md:flex-row md:items-center">
-              <img src={p.imagenes[0]} alt="" loading="lazy" width={200} height={160} className="h-32 w-full rounded-2xl object-cover md:w-44" />
+              <img src={p.imagenes[0] ?? imagenesDe(p.cultivo)[0]} onError={(e) => { e.currentTarget.src = imagenesDe(p.cultivo)[0]!; }} alt={`${CULTIVOS[p.cultivo].nombre} ${p.variedad}`} loading="lazy" width={200} height={160} className="h-32 w-full rounded-2xl object-cover md:w-44" />
               <div className="min-w-0 flex-1 space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-display text-lg font-bold">
