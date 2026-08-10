@@ -49,7 +49,11 @@ export const analizarCultivo = createServerFn({ method: "POST" })
         "Analiza la foto y responde en español simple y directo, pensando en un pequeño productor andino. " +
         "Si la imagen no corresponde a una planta o fruto del cultivo indicado, marca esCultivo en false. " +
         "Si la planta está sana, usa enfermedad: 'Sin enfermedad detectada'. " +
-        "Menciona productos por ingrediente activo y dosis aproximadas por hectárea.",
+        "Menciona productos por ingrediente activo y dosis aproximadas por hectárea. " +
+        "Devuelve SIEMPRE todos los campos del esquema con contenido útil: esCultivo (boolean), enfermedad, " +
+        "nombreCientifico (o cadena vacía si no aplica), confianza (0-100), severidad ('leve' | 'moderada' | 'severa'), " +
+        "sintomas (2-4 frases), tratamiento (2-4 pasos concretos), prevencion (2-4 consejos) y resumen (2 oraciones). " +
+        "Nunca dejes arreglos vacíos ni textos en blanco.",
       messages: [
         {
           role: "user",
