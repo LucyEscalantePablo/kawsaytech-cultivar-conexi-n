@@ -54,14 +54,15 @@ const productor: NavSectionDef[] = [
     ],
   },
   {
-    label: "Próximos módulos",
+    label: "Herramientas agrícolas",
     items: [
-      { title: "Diagnóstico IA", url: "/diagnostico", icon: ScanEye, proximamente: true },
-      { title: "Fertilizantes", url: "/fertilizantes", icon: FlaskConical, proximamente: true },
-      { title: "Cuidados del Cultivo", url: "/cuidados", icon: Sprout, proximamente: true },
-      { title: "Alertas Climáticas", url: "/alertas", icon: CloudSun, proximamente: true },
+      { title: "Diagnóstico IA", url: "/diagnostico", icon: ScanEye },
+      { title: "Fertilizantes", url: "/fertilizantes", icon: FlaskConical },
+      { title: "Cuidados del Cultivo", url: "/cuidados", icon: Sprout },
+      { title: "Alertas Climáticas", url: "/alertas", icon: CloudSun },
     ],
   },
+
   {
     label: "Cuenta",
     items: [
