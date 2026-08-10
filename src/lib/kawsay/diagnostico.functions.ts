@@ -11,22 +11,32 @@ const Input = z.object({
 });
 
 const Resultado = z.object({
-  esCultivo: z.boolean(),
-  enfermedad: z.string(),
-  nombreCientifico: z.string(),
-  confianza: z.number().min(0).max(100),
-  severidad: z.enum(["leve", "moderada", "severa"]),
-  sintomas: z.array(z.string()).max(5),
-  tratamiento: z.array(z.string()).max(5),
-  prevencion: z.array(z.string()).max(5),
-  resumen: z.string(),
+  esCultivo: z.boolean().optional(),
+  enfermedad: z.string().optional(),
+  nombreCientifico: z.string().optional(),
+  confianza: z.number().optional(),
+  severidad: z.string().optional(),
+  sintomas: z.array(z.string()).optional(),
+  tratamiento: z.array(z.string()).optional(),
+  prevencion: z.array(z.string()).optional(),
+  resumen: z.string().optional(),
 });
 
-export type DiagnosticoResultado = z.infer<typeof Resultado>;
+export interface DiagnosticoResultado {
+  esCultivo: boolean;
+  enfermedad: string;
+  nombreCientifico: string;
+  confianza: number;
+  severidad: "leve" | "moderada" | "severa";
+  sintomas: string[];
+  tratamiento: string[];
+  prevencion: string[];
+  resumen: string;
+}
 
 export const analizarCultivo = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<DiagnosticoResultado> => {
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("Falta la configuración de IA (LOVABLE_API_KEY)");
 
@@ -56,5 +66,18 @@ export const analizarCultivo = createServerFn({ method: "POST" })
       ],
     });
 
-    return await result.output;
+    const r = await result.output;
+    const sev = (r.severidad ?? "").toLowerCase();
+    const salida: DiagnosticoResultado = {
+      esCultivo: r.esCultivo ?? true,
+      enfermedad: r.enfermedad ?? "Sin enfermedad detectada",
+      nombreCientifico: r.nombreCientifico ?? "",
+      confianza: Math.min(100, Math.max(0, r.confianza ?? 0)),
+      severidad: sev.startsWith("sev") ? "severa" : sev.startsWith("mod") ? "moderada" : "leve",
+      sintomas: (r.sintomas ?? []).slice(0, 5),
+      tratamiento: (r.tratamiento ?? []).slice(0, 5),
+      prevencion: (r.prevencion ?? []).slice(0, 5),
+      resumen: r.resumen ?? "",
+    };
+    return salida;
   });
