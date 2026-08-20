@@ -479,5 +479,28 @@ export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
   emit();
 }
 
+/** Paso 7: guarda la modalidad de entrega y pasa la solicitud a "coordinada". */
+export function coordinarEntrega(
+  id: string,
+  entrega: Omit<Entrega, "fecha"> & { fecha?: string },
+) {
+  solicitudes = solicitudes.map((s) =>
+    s.id === id
+      ? {
+          ...s,
+          estado: "coordinada",
+          entrega: { ...entrega, fecha: entrega.fecha ?? new Date().toISOString().slice(0, 10) },
+        }
+      : s,
+  );
+  emit();
+}
+
+/** Paso 8: cierra la transacción como completada. */
+export function completarSolicitud(id: string) {
+  solicitudes = solicitudes.map((s) => (s.id === id ? { ...s, estado: "completada" } : s));
+  emit();
+}
+
 export const soles = (n: number) =>
   `S/ ${n.toLocaleString("es-PE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
