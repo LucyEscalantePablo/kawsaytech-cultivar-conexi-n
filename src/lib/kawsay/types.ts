@@ -71,6 +71,8 @@ export interface Solicitud {
   mensaje: string;
   fechaRequerida: string;
   estado: EstadoSolicitud;
+  compradorTelefono?: string;
+  entrega?: Entrega;
   creada: string;
 }
 
