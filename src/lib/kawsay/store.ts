@@ -12,7 +12,138 @@ import type {
   Solicitud,
   Venta,
   EstadoPublicacion,
+  Entrega,
+  PuntoAcopio,
 } from "./types";
+
+/** Red nacional de puntos de acopio (datos de ejemplo del MVP). */
+export const PUNTOS_ACOPIO: PuntoAcopio[] = [
+  {
+    id: "pa-1",
+    nombre: "Centro de Acopio Chinchao",
+    direccion: "Carretera Central km 32, mercado zonal",
+    region: "Huánuco",
+    provincia: "Huánuco",
+    distrito: "Chinchao",
+    lat: -9.6167,
+    lng: -76.0833,
+    horario: "Lun a Sáb · 6:00 – 16:00",
+  },
+  {
+    id: "pa-2",
+    nombre: "Acopio Agrario Huánuco Centro",
+    direccion: "Av. Universitaria 1250, Cayhuayna",
+    region: "Huánuco",
+    provincia: "Huánuco",
+    distrito: "Pillco Marca",
+    lat: -9.9611,
+    lng: -76.2422,
+    horario: "Lun a Dom · 5:00 – 18:00",
+  },
+  {
+    id: "pa-3",
+    nombre: "Centro de Acopio Huanta",
+    direccion: "Jr. Gervasio Santillana 480",
+    region: "Ayacucho",
+    provincia: "Huanta",
+    distrito: "Huanta",
+    lat: -12.9375,
+    lng: -74.2472,
+    horario: "Mar a Dom · 6:00 – 15:00",
+  },
+  {
+    id: "pa-4",
+    nombre: "Plataforma Agrícola Ayacucho",
+    direccion: "Mercado Mayorista Nery García, Av. Los Incas",
+    region: "Ayacucho",
+    provincia: "Huamanga",
+    distrito: "Ayacucho",
+    lat: -13.1588,
+    lng: -74.2239,
+    horario: "Lun a Sáb · 5:30 – 17:00",
+  },
+  {
+    id: "pa-5",
+    nombre: "Acopio Valle del Mantaro",
+    direccion: "Av. Circunvalación s/n, feria agropecuaria",
+    region: "Junín",
+    provincia: "Concepción",
+    distrito: "Concepción",
+    lat: -11.9139,
+    lng: -75.3167,
+    horario: "Lun, Mié y Vie · 6:00 – 14:00",
+  },
+  {
+    id: "pa-6",
+    nombre: "Terminal Agrícola Huancayo",
+    direccion: "Jr. Huancas 900, El Tambo",
+    region: "Junín",
+    provincia: "Huancayo",
+    distrito: "El Tambo",
+    lat: -12.0553,
+    lng: -75.2103,
+    horario: "Lun a Dom · 4:00 – 19:00",
+  },
+  {
+    id: "pa-7",
+    nombre: "Centro de Acopio Limatambo",
+    direccion: "Plaza principal, vía Cusco–Abancay",
+    region: "Cusco",
+    provincia: "Anta",
+    distrito: "Limatambo",
+    lat: -13.4917,
+    lng: -72.4333,
+    horario: "Mar a Sáb · 6:00 – 15:00",
+  },
+  {
+    id: "pa-8",
+    nombre: "Acopio Vinocanchón San Jerónimo",
+    direccion: "Mercado mayorista Vinocanchón",
+    region: "Cusco",
+    provincia: "Cusco",
+    distrito: "San Jerónimo",
+    lat: -13.5678,
+    lng: -71.8853,
+    horario: "Lun a Dom · 5:00 – 18:00",
+  },
+  {
+    id: "pa-9",
+    nombre: "Acopio Valle de Virú",
+    direccion: "Panamericana Norte km 515",
+    region: "La Libertad",
+    provincia: "Virú",
+    distrito: "Virú",
+    lat: -8.4142,
+    lng: -78.7539,
+    horario: "Lun a Sáb · 6:00 – 17:00",
+  },
+  {
+    id: "pa-10",
+    nombre: "Hub Logístico Santa Anita",
+    direccion: "Gran Mercado Mayorista de Lima, Santa Anita",
+    region: "Lima",
+    provincia: "Lima",
+    distrito: "Santa Anita",
+    lat: -12.0533,
+    lng: -76.9497,
+    horario: "Lun a Dom · 24 horas",
+  },
+];
+
+export const getPuntoAcopio = (id?: string) =>
+  id ? PUNTOS_ACOPIO.find((p) => p.id === id) : undefined;
+
+/**
+ * Puntos de acopio cercanos: primero los de la región del productor (origen),
+ * luego los de la región del comprador (destino).
+ */
+export function puntosCercanos(regionOrigen?: string, regionDestino?: string): PuntoAcopio[] {
+  const origen = PUNTOS_ACOPIO.filter((p) => p.region === regionOrigen);
+  const destino = PUNTOS_ACOPIO.filter(
+    (p) => p.region === regionDestino && p.region !== regionOrigen,
+  );
+  return [...origen, ...destino];
+}
 
 export const IMAGENES: Record<CultivoId, string[]> = {
   papa: [papa, papa2, papa3],
@@ -172,6 +303,8 @@ let solicitudes: Solicitud[] = [
     publicacionId: "pub-1",
     comprador: "Mercado Santa Anita",
     compradorEmail: "comprador@kawsaytech.pe",
+    compradorTelefono: "+51 987 654 321",
+    compradorRegion: "Lima",
     cantidad: 1200,
     precioOfrecido: 2.45,
     mensaje: "Necesitamos entrega en dos camionadas, pagamos al contado en chacra.",
@@ -184,6 +317,8 @@ let solicitudes: Solicitud[] = [
     publicacionId: "pub-1",
     comprador: "Mercado Santa Anita",
     compradorEmail: "comprador@kawsaytech.pe",
+    compradorTelefono: "+51 987 654 321",
+    compradorRegion: "Lima",
     cantidad: 300,
     precioOfrecido: 2.8,
     mensaje: "Compra semanal recurrente si la calidad se mantiene.",
@@ -195,6 +330,8 @@ let solicitudes: Solicitud[] = [
     id: "sol-3",
     publicacionId: "pub-4",
     comprador: "Exportadora AndesFresh",
+    compradorTelefono: "+51 955 310 220",
+    compradorRegion: "La Libertad",
     cantidad: 1500,
     precioOfrecido: 4.0,
     mensaje: "Requerimos ficha técnica y análisis de residuos.",
@@ -345,6 +482,29 @@ export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
       ...ventas,
     ];
   }
+  emit();
+}
+
+/** Paso 7: guarda la modalidad de entrega y pasa la solicitud a "coordinada". */
+export function coordinarEntrega(
+  id: string,
+  entrega: Omit<Entrega, "fecha"> & { fecha?: string },
+) {
+  solicitudes = solicitudes.map((s) =>
+    s.id === id
+      ? {
+          ...s,
+          estado: "coordinada",
+          entrega: { ...entrega, fecha: entrega.fecha ?? new Date().toISOString().slice(0, 10) },
+        }
+      : s,
+  );
+  emit();
+}
+
+/** Paso 8: cierra la transacción como completada. */
+export function completarSolicitud(id: string) {
+  solicitudes = solicitudes.map((s) => (s.id === id ? { ...s, estado: "completada" } : s));
   emit();
 }
 
