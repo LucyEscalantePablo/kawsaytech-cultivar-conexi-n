@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CULTIVOS, getPublicacion, responderSolicitud, soles, useKawsayData } from "@/lib/kawsay/store";
+import { EntregaPanel, PasosEntrega } from "@/components/kawsay/EntregaPanel";
 import type { Solicitud } from "@/lib/kawsay/types";
 
 export const Route = createFileRoute("/solicitudes")({
@@ -51,6 +52,12 @@ function Fila({ s }: { s: Solicitud }) {
         </div>
       </div>
       {s.mensaje && <p className="rounded-2xl bg-muted/60 p-4 text-sm text-muted-foreground">“{s.mensaje}”</p>}
+      {(s.estado === "aceptada" || s.estado === "coordinada" || s.estado === "completada") && (
+        <div className="space-y-4">
+          <PasosEntrega estado={s.estado} />
+          <EntregaPanel s={s} modo="productor" />
+        </div>
+      )}
       {s.estado === "pendiente" && (
         <div className="flex flex-wrap gap-3">
           <Button size="lg" className="h-12 rounded-xl" onClick={() => { responderSolicitud(s.id, "aceptada"); toast.success("Solicitud aceptada y venta registrada"); }}>
@@ -69,7 +76,8 @@ function Solicitudes() {
   const { solicitudes } = useKawsayData();
   const grupos = {
     pendiente: solicitudes.filter((s) => s.estado === "pendiente"),
-    aceptada: solicitudes.filter((s) => s.estado === "aceptada"),
+    aceptada: solicitudes.filter((s) => s.estado === "aceptada" || s.estado === "coordinada"),
+    completada: solicitudes.filter((s) => s.estado === "completada"),
     rechazada: solicitudes.filter((s) => s.estado === "rechazada"),
   };
 
@@ -79,9 +87,10 @@ function Solicitudes() {
         <TabsList className="h-12 rounded-2xl">
           <TabsTrigger value="pendiente" className="rounded-xl px-5">Pendientes</TabsTrigger>
           <TabsTrigger value="aceptada" className="rounded-xl px-5">Aceptadas</TabsTrigger>
+          <TabsTrigger value="completada" className="rounded-xl px-5">Completadas</TabsTrigger>
           <TabsTrigger value="rechazada" className="rounded-xl px-5">Rechazadas</TabsTrigger>
         </TabsList>
-        {(["pendiente", "aceptada", "rechazada"] as const).map((k) => (
+        {(["pendiente", "aceptada", "completada", "rechazada"] as const).map((k) => (
           <TabsContent key={k} value={k} className="mt-6 space-y-5">
             {grupos[k].map((s) => (
               <Fila key={s.id} s={s} />
