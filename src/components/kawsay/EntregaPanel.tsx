@@ -68,7 +68,7 @@ function TarjetaPunto({
   );
 }
 
-function Contacto({ nombre, telefono, rol }: { nombre: string; telefono?: string; rol: string }) {
+function Contacto({ nombre, telefono, rol }: { nombre: string; telefono?: string | undefined; rol: string }) {
   if (!telefono) return null;
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-muted/60 p-4">
