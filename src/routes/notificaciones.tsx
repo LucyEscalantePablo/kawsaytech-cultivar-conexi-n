@@ -23,6 +23,8 @@ const iconos = {
   pendiente: { i: Clock, tono: "bg-harvest/30 text-harvest-foreground", texto: "Solicitud enviada, esperando respuesta" },
   aceptada: { i: CheckCircle2, tono: "bg-success/20 text-success", texto: "El productor aceptó tu solicitud" },
   rechazada: { i: XCircle, tono: "bg-destructive/15 text-destructive", texto: "El productor rechazó tu solicitud" },
+  coordinada: { i: CheckCircle2, tono: "bg-primary/15 text-primary", texto: "Entrega coordinada con el productor" },
+  completada: { i: CheckCircle2, tono: "bg-success/20 text-success", texto: "Entrega completada" },
   cerrada: { i: CheckCircle2, tono: "bg-muted text-muted-foreground", texto: "Solicitud cerrada" },
 } as const;
 
