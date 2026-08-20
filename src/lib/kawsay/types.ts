@@ -4,7 +4,34 @@ export type Calidad = "Primera" | "Segunda" | "Exportación" | "Orgánica";
 
 export type EstadoPublicacion = "activa" | "pausada" | "vendida";
 
-export type EstadoSolicitud = "pendiente" | "aceptada" | "rechazada" | "cerrada";
+export type EstadoSolicitud =
+  | "pendiente"
+  | "aceptada"
+  | "coordinada"
+  | "completada"
+  | "rechazada"
+  | "cerrada";
+
+export type ModalidadEntrega = "acopio" | "directa";
+
+export interface PuntoAcopio {
+  id: string;
+  nombre: string;
+  direccion: string;
+  region: string;
+  provincia: string;
+  distrito: string;
+  lat: number;
+  lng: number;
+  horario: string;
+}
+
+export interface Entrega {
+  modalidad: ModalidadEntrega;
+  puntoAcopioId?: string;
+  fecha: string;
+  nota?: string;
+}
 
 export interface Agricultor {
   id: string;
