@@ -72,6 +72,7 @@ export interface Solicitud {
   fechaRequerida: string;
   estado: EstadoSolicitud;
   compradorTelefono?: string;
+  compradorRegion?: string;
   entrega?: Entrega;
   creada: string;
 }
