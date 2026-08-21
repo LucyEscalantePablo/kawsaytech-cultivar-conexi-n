@@ -137,7 +137,9 @@ function combinar(cultivo: "papa" | "palta", votos: Voto[]): DiagnosticoResultad
   const acumulado = new Map<string, number>(clases.map((c) => [c.id, 0]));
   let aportes = 0;
   for (const v of validos) {
-    const lista = (v.probabilidades ?? []).filter((p) => acumulado.has(p.claseId));
+    const lista = (v.probabilidades ?? [])
+      .map(parsearProbabilidad)
+      .filter((p): p is { claseId: string; probabilidad: number } => !!p && acumulado.has(p.claseId));
     const total = lista.reduce((s, p) => s + Math.max(0, p.probabilidad), 0);
     if (total <= 0) {
       if (v.claseId && acumulado.has(v.claseId)) {
