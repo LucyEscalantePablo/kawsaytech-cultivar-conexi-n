@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { Camera, Loader2, ScanEye, ShieldCheck, Upload, AlertTriangle, Trash2 } from "lucide-react";
+import { Camera, Loader2, ScanEye, ShieldCheck, Upload, AlertTriangle, Trash2, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CULTIVOS } from "@/lib/kawsay/store";
 import type { CultivoId } from "@/lib/kawsay/types";
 import { analizarCultivo, type DiagnosticoResultado } from "@/lib/kawsay/diagnostico.functions";
+import { CLASES_PAPA, DATASETS_REFERENCIA } from "@/lib/kawsay/clasificador";
 
 export const Route = createFileRoute("/diagnostico")({
   head: () => ({
@@ -209,23 +210,57 @@ function DiagnosticoPage() {
                   {resultado.nombreCientifico && (
                     <p className="text-sm italic text-muted-foreground">{resultado.nombreCientifico}</p>
                   )}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Clase del dataset: <span className="font-semibold">{resultado.etiquetaDataset}</span>
+                  </p>
                 </div>
                 <Badge className={`rounded-full ${severidadColor[resultado.severidad] ?? ""}`}>
                   Severidad {resultado.severidad}
                 </Badge>
               </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Confianza del modelo</span>
-                  <span className="font-bold">{Math.round(resultado.confianza)}%</span>
+              {!resultado.concluyente && (
+                <div className="flex gap-2 rounded-xl border border-dashed border-harvest bg-harvest/10 p-3 text-sm">
+                  <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                  <span>
+                    Resultado <strong>no concluyente</strong> ({Math.round(resultado.confianza)}% de confianza).
+                    Toma otra foto más cercana y enfocada de la lesión antes de aplicar tratamientos.
+                  </span>
                 </div>
-                <Progress value={resultado.confianza} className="h-2" />
+              )}
+
+              {resultado.calidadImagen !== "buena" && resultado.problemasImagen.length > 0 && (
+                <div className="rounded-xl bg-muted/60 p-3 text-xs text-muted-foreground">
+                  <span className="font-semibold">Calidad de imagen {resultado.calidadImagen}:</span>{" "}
+                  {resultado.problemasImagen.join(" · ")}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <p className="flex items-center gap-2 font-display text-sm font-bold">
+                  <BarChart3 className="size-4 text-primary" /> Probabilidad por clase
+                </p>
+                {resultado.probabilidades.map((p) => (
+                  <div key={p.claseId} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className={p.claseId === resultado.claseId ? "font-bold" : "text-muted-foreground"}>
+                        {p.etiqueta}
+                      </span>
+                      <span className="font-mono text-xs">{p.probabilidad.toFixed(1)}%</span>
+                    </div>
+                    <Progress value={p.probabilidad} className="h-2" />
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground">
+                  Área foliar afectada estimada: {resultado.porcentajeAreaAfectada}% · promedio de 2 inferencias del
+                  modelo.
+                </p>
               </div>
 
               <p className="text-sm text-muted-foreground">{resultado.resumen}</p>
 
               <Bloque icono={<AlertTriangle className="size-4 text-harvest-foreground" />} titulo="Síntomas observados" items={resultado.sintomas} />
+              <Bloque icono={<ScanEye className="size-4 text-muted-foreground" />} titulo="Diagnóstico diferencial" items={resultado.diferencial} />
               <Bloque icono={<ShieldCheck className="size-4 text-primary" />} titulo="Tratamiento recomendado" items={resultado.tratamiento} />
               <Bloque icono={<ShieldCheck className="size-4 text-success" />} titulo="Prevención" items={resultado.prevencion} />
 
@@ -239,10 +274,34 @@ function DiagnosticoPage() {
             <Card className="gap-2 rounded-3xl border-dashed p-6 shadow-none">
               <p className="font-display font-bold">Aún no hay análisis</p>
               <p className="text-sm text-muted-foreground">
-                Sube una foto y presiona “Analizar con IA” para obtener enfermedad, severidad, tratamiento y prevención.
+                Sube una foto y presiona “Analizar con IA” para obtener la clase de enfermedad con su probabilidad,
+                severidad, tratamiento y prevención.
               </p>
             </Card>
           )}
+
+          <Card className="gap-3 rounded-3xl p-6 shadow-soft">
+            <p className="font-display text-sm font-bold">Clases reconocidas en papa</p>
+            <div className="flex flex-wrap gap-2">
+              {CLASES_PAPA.map((c) => (
+                <Badge key={c.id} variant="secondary" className="rounded-full">
+                  {c.etiqueta} · {c.etiquetaDataset}
+                </Badge>
+              ))}
+            </div>
+            <p className="font-display text-sm font-bold">Datasets de referencia</p>
+            <ul className="space-y-1 text-xs text-muted-foreground">
+              {DATASETS_REFERENCIA.map((d) => (
+                <li key={d.url}>
+                  <a href={d.url} target="_blank" rel="noreferrer" className="font-semibold underline">
+                    {d.nombre}
+                  </a>{" "}
+                  ({d.autor}) — {d.clases}
+                </li>
+              ))}
+            </ul>
+          </Card>
+
 
           {historial.length > 0 && (
             <section className="space-y-3">
