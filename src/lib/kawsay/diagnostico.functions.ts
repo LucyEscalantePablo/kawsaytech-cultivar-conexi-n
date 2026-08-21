@@ -14,9 +14,8 @@ const Input = z.object({
 const Resultado = z.object({
   esCultivo: z.boolean().optional(),
   claseId: z.string().optional(),
-  probabilidades: z
-    .array(z.object({ claseId: z.string(), probabilidad: z.number() }))
-    .optional(),
+  /** Una entrada por clase, con formato "claseId=probabilidad" (ej. "tizon_tardio=72"). */
+  probabilidades: z.array(z.string()).optional(),
   severidad: z.string().optional(),
   porcentajeAreaAfectada: z.number().optional(),
   calidadImagen: z.string().optional(),
