@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CULTIVOS, getPublicacion, responderSolicitud, soles, useKawsayData } from "@/lib/kawsay/store";
 import { EntregaPanel, PasosEntrega } from "@/components/kawsay/EntregaPanel";
 import type { Solicitud } from "@/lib/kawsay/types";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export const Route = createFileRoute("/solicitudes")({
   head: () => ({
@@ -32,7 +33,7 @@ function Fila({ s }: { s: Solicitud }) {
             <User className="size-5 text-primary" /> {s.comprador}
           </p>
           <p className="text-sm text-muted-foreground">
-            {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"} · solicitado el {s.creada}
+            {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"} · solicitado el {formatDateDDMMYYYY(s.creada)}
           </p>
         </div>
         <Badge variant="outline" className="rounded-full capitalize">{s.estado}</Badge>
@@ -48,7 +49,7 @@ function Fila({ s }: { s: Solicitud }) {
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">Fecha requerida</p>
-          <p className="flex items-center gap-1 font-semibold"><CalendarDays className="size-4" /> {s.fechaRequerida}</p>
+          <p className="flex items-center gap-1 font-semibold"><CalendarDays className="size-4" /> {formatDateDDMMYYYY(s.fechaRequerida)}</p>
         </div>
       </div>
       {s.mensaje && <p className="rounded-2xl bg-muted/60 p-4 text-sm text-muted-foreground">“{s.mensaje}”</p>}

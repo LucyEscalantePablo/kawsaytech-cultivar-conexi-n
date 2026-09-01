@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export const Route = createFileRoute("/historial")({
   head: () => ({
@@ -58,7 +59,7 @@ function Historial() {
                     const pub = getPublicacion(v.publicacionId);
                     return (
                       <TableRow key={v.id}>
-                        <TableCell>{v.fecha}</TableCell>
+                        <TableCell>{formatDateDDMMYYYY(v.fecha)}</TableCell>
                         <TableCell className="font-medium">
                           {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "—"}
                         </TableCell>
@@ -94,7 +95,7 @@ function Historial() {
                     const pub = getPublicacion(s.publicacionId);
                     return (
                       <TableRow key={s.id}>
-                        <TableCell>{s.creada}</TableCell>
+                        <TableCell>{formatDateDDMMYYYY(s.creada)}</TableCell>
                         <TableCell className="font-medium">{s.comprador}</TableCell>
                         <TableCell>{pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "—"}</TableCell>
                         <TableCell className="text-right">{soles(s.precioOfrecido)}</TableCell>

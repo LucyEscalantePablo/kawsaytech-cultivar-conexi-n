@@ -14,6 +14,7 @@ import {
   puntosCercanos,
 } from "@/lib/kawsay/store";
 import type { PuntoAcopio, Solicitud } from "@/lib/kawsay/types";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 const soloDigitos = (t: string) => t.replace(/[^\d]/g, "");
 
@@ -159,7 +160,7 @@ export function EntregaPanel({ s, modo }: { s: Solicitud; modo: "productor" | "c
             “{s.entrega.nota}”
           </p>
         )}
-        <p className="text-xs text-muted-foreground">Coordinada el {s.entrega.fecha}</p>
+        <p className="text-xs text-muted-foreground">Coordinada el {formatDateDDMMYYYY(s.entrega.fecha)}</p>
         {modo === "productor" && s.estado === "coordinada" && (
           <Button
             className="h-12 rounded-xl"

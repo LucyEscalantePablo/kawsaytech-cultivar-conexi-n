@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -122,7 +123,7 @@ function Dashboard() {
                     <div className="min-w-0">
                       <p className="truncate font-medium">{v.comprador}</p>
                       <p className="text-sm text-muted-foreground">
-                        {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "—"} · {v.fecha}
+                        {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "—"} · {formatDateDDMMYYYY(v.fecha)}
                       </p>
                     </div>
                     <p className="font-display font-bold text-success">{soles(v.cantidad * v.precio)}</p>

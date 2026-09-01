@@ -1,4 +1,5 @@
 import type { CultivoId } from "./types";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export type SueloId = "arenoso" | "franco" | "arcilloso";
 
@@ -139,7 +140,7 @@ export function calendarioCuidados(cultivo: CultivoId, inicio: string): Labor[] 
     d.setDate(d.getDate() + l.semana * 7);
     return {
       ...l,
-      fecha: d.toLocaleDateString("es-PE", { day: "2-digit", month: "short", year: "numeric" }),
+      fecha: formatDateDDMMYYYY(d),
     };
   });
 }
@@ -206,11 +207,10 @@ export interface AlertaClima {
 export function generarAlertas(dias: DiaClima[]): AlertaClima[] {
   const alertas: AlertaClima[] = [];
   for (const d of dias) {
-    const fecha = new Date(d.fecha + "T12:00:00").toLocaleDateString("es-PE", {
-      weekday: "long",
-      day: "2-digit",
-      month: "short",
-    });
+    const dateObj = new Date(d.fecha + "T12:00:00");
+    const weekday = dateObj.toLocaleDateString("es-PE", { weekday: "long" });
+    const formattedDate = formatDateDDMMYYYY(dateObj);
+    const fecha = `${weekday} ${formattedDate}`;
     if (d.tmin <= 2)
       alertas.push({
         tipo: "helada",

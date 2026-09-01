@@ -33,6 +33,12 @@ function Calendar({
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatCaption: (date) => {
+          const day = String(date.getDate()).padStart(2, "0");
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`;
+        },
         ...formatters,
       }}
       classNames={{
@@ -154,7 +160,12 @@ function CalendarDayButton({
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString()}
+      data-day={(() => {
+        const dayNum = String(day.date.getDate()).padStart(2, "0");
+        const monthNum = String(day.date.getMonth() + 1).padStart(2, "0");
+        const year = day.date.getFullYear();
+        return `${dayNum}/${monthNum}/${year}`;
+      })()}
       data-selected-single={
         modifiers["selected"] &&
         !modifiers["range_start"] &&

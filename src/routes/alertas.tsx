@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { REGIONES } from "@/lib/kawsay/store";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 import { generarAlertas, obtenerClima, type AlertaClima, type DiaClima } from "@/lib/kawsay/agro";
 
 export const Route = createFileRoute("/alertas")({
@@ -160,13 +161,15 @@ function AlertasPage() {
                 {data.map((d) => {
                   const Icono = iconoDia(d);
                   const fecha = new Date(d.fecha + "T12:00:00");
+                  const weekday = fecha.toLocaleDateString("es-PE", { weekday: "long" });
+                  const formattedDate = formatDateDDMMYYYY(fecha);
                   return (
                     <Card key={d.fecha} className="gap-2 rounded-2xl p-5 shadow-soft">
                       <p className="text-sm font-semibold capitalize">
-                        {fecha.toLocaleDateString("es-PE", { weekday: "long" })}
+                        {weekday}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "short" })}
+                        {formattedDate}
                       </p>
                       <Icono className="my-1 size-9 text-primary" />
                       <p className="font-display text-2xl font-extrabold">{Math.round(d.tmax)}°</p>

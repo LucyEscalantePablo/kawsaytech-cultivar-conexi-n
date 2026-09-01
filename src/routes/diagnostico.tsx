@@ -16,6 +16,7 @@ import { CULTIVOS } from "@/lib/kawsay/store";
 import type { CultivoId } from "@/lib/kawsay/types";
 import { analizarCultivo, type DiagnosticoResultado } from "@/lib/kawsay/diagnostico.functions";
 import { CLASES_PAPA, DATASETS_REFERENCIA } from "@/lib/kawsay/clasificador";
+import { formatDateTimeShort } from "@/lib/utils";
 
 export const Route = createFileRoute("/diagnostico")({
   head: () => ({
@@ -70,7 +71,7 @@ function DiagnosticoPage() {
           id: crypto.randomUUID(),
           cultivo,
           imagen: imagen!,
-          fecha: new Date().toLocaleString("es-PE", { dateStyle: "medium", timeStyle: "short" }),
+          fecha: formatDateTimeShort(new Date()),
         },
         ...h,
       ]);

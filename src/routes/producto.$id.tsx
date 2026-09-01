@@ -44,6 +44,7 @@ import {
   useKawsayData,
 } from "@/lib/kawsay/store";
 import { alternarFavorito, useAuth } from "@/lib/kawsay/auth";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 
 export const Route = createFileRoute("/producto/$id")({
@@ -158,7 +159,7 @@ function DetalleProducto() {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-muted-foreground">Cosecha</p>
-                  <p className="font-semibold">{pub.fechaCosecha}</p>
+                  <p className="font-semibold">{formatDateDDMMYYYY(pub.fechaCosecha)}</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-muted-foreground">Estado</p>
@@ -182,7 +183,7 @@ function DetalleProducto() {
                   <MapPin className="size-4 text-primary" /> {pub.distrito}, {pub.region}
                 </p>
                 <p className="flex items-center gap-2">
-                  <CalendarDays className="size-4 text-primary" /> Publicado el {pub.creada}
+                  <CalendarDays className="size-4 text-primary" /> Publicado el {formatDateDDMMYYYY(pub.creada)}
                 </p>
               </div>
 

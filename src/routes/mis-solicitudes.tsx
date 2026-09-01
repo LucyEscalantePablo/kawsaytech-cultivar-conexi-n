@@ -9,6 +9,7 @@ import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/sto
 import { useAuth } from "@/lib/kawsay/auth";
 import { EntregaPanel, PasosEntrega } from "@/components/kawsay/EntregaPanel";
 import type { Solicitud } from "@/lib/kawsay/types";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export const Route = createFileRoute("/mis-solicitudes")({
   head: () => ({
@@ -32,7 +33,7 @@ function Fila({ s }: { s: Solicitud }) {
             {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"}
           </p>
           <p className="text-sm text-muted-foreground">
-            {pub ? `${pub.distrito}, ${pub.region}` : "—"} · enviada el {s.creada}
+            {pub ? `${pub.distrito}, ${pub.region}` : "—"} · enviada el {formatDateDDMMYYYY(s.creada)}
           </p>
         </div>
         <Badge variant="outline" className="rounded-full capitalize">{s.estado}</Badge>
@@ -48,7 +49,7 @@ function Fila({ s }: { s: Solicitud }) {
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">Fecha requerida</p>
-          <p className="flex items-center gap-1 font-semibold"><CalendarDays className="size-4" /> {s.fechaRequerida}</p>
+          <p className="flex items-center gap-1 font-semibold"><CalendarDays className="size-4" /> {formatDateDDMMYYYY(s.fechaRequerida)}</p>
         </div>
       </div>
       {s.mensaje && <p className="rounded-2xl bg-muted/60 p-4 text-sm text-muted-foreground">“{s.mensaje}”</p>}

@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CULTIVOS, getAgricultor, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
 import { useAuth } from "@/lib/kawsay/auth";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 
 export const Route = createFileRoute("/mis-compras")({
   head: () => ({
@@ -62,7 +63,7 @@ function MisCompras() {
                     <TableCell className="text-right font-display font-bold text-success">
                       {soles(v.cantidad * v.precio)}
                     </TableCell>
-                    <TableCell>{v.fecha}</TableCell>
+                    <TableCell>{formatDateDDMMYYYY(v.fecha)}</TableCell>
                   </TableRow>
                 );
               })}

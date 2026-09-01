@@ -6,6 +6,7 @@ import { StatCard } from "@/components/kawsay/StatCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
 import { useAuth } from "@/lib/kawsay/auth";
 
@@ -90,7 +91,7 @@ function PanelComprador() {
                         {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {s.cantidad.toLocaleString("es-PE")} {pub?.unidad} · {s.creada}
+                        {s.cantidad.toLocaleString("es-PE")} {pub?.unidad} · {formatDateDDMMYYYY(s.creada)}
                       </p>
                     </div>
                     <div className="text-right">

@@ -4,6 +4,7 @@ import { AppShell } from "@/components/kawsay/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatDateDDMMYYYY } from "@/lib/utils";
 import { CULTIVOS, getPublicacion, soles, useKawsayData } from "@/lib/kawsay/store";
 import { useAuth } from "@/lib/kawsay/auth";
 
@@ -48,7 +49,7 @@ function Notificaciones() {
                 <p className="font-semibold">{meta.texto}</p>
                 <p className="truncate text-sm text-muted-foreground">
                   {pub ? `${CULTIVOS[pub.cultivo].nombre} ${pub.variedad}` : "Publicación eliminada"} ·{" "}
-                  {s.cantidad.toLocaleString("es-PE")} {pub?.unidad} a {soles(s.precioOfrecido)} · {s.creada}
+                  {s.cantidad.toLocaleString("es-PE")} {pub?.unidad} a {soles(s.precioOfrecido)} · {formatDateDDMMYYYY(s.creada)}
                 </p>
               </div>
               <Badge variant="outline" className="rounded-full capitalize">{s.estado}</Badge>
