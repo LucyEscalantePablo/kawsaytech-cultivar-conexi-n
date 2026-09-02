@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { ImagePlus, Check } from "lucide-react";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { ImagePlus, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/kawsay/AppShell";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CULTIVOS, IMAGENES, REGIONES, crearPublicacion } from "@/lib/kawsay/store";
+import {
+  CULTIVOS,
+  IMAGENES,
+  REGIONES,
+  actualizarPublicacion,
+  crearPublicacion,
+  getPublicacion,
+} from "@/lib/kawsay/store";
 import type { Calidad, CultivoId, EstadoPublicacion, Publicacion } from "@/lib/kawsay/types";
 
 export const Route = createFileRoute("/publicar")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    editar: typeof search.editar === "string" ? search.editar : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Publicar producto · KawsayTech" },
@@ -26,6 +36,9 @@ export const Route = createFileRoute("/publicar")({
 
 function Publicar() {
   const navigate = useNavigate();
+  const { editar } = useSearch({ from: "/publicar" });
+  const publicacionEditar = editar ? getPublicacion(editar) : undefined;
+  const [cargado, setCargado] = useState(false);
   const [cultivo, setCultivo] = useState<CultivoId>("papa");
   const [variedad, setVariedad] = useState(CULTIVOS.papa.variedades[0]!);
   const [cantidad, setCantidad] = useState("");
@@ -37,6 +50,59 @@ function Publicar() {
   const [fechaCosecha, setFechaCosecha] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [estado, setEstado] = useState<EstadoPublicacion>("activa");
+  const [imagenes, setImagenes] = useState<string[]>(
+    publicacionEditar?.imagenes?.length ? publicacionEditar.imagenes : IMAGENES.papa,
+  );
+  const inputImagenes = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!editar || !publicacionEditar || cargado) return;
+    setCultivo(publicacionEditar.cultivo);
+    setVariedad(publicacionEditar.variedad);
+    setCantidad(String(publicacionEditar.cantidad));
+    setUnidad(publicacionEditar.unidad);
+    setPrecio(String(publicacionEditar.precio));
+    setCalidad(publicacionEditar.calidad);
+    setRegion(publicacionEditar.region);
+    setDistrito(publicacionEditar.distrito);
+    setFechaCosecha(publicacionEditar.fechaCosecha);
+    setDescripcion(publicacionEditar.descripcion);
+    setEstado(publicacionEditar.estado);
+    setImagenes(publicacionEditar.imagenes);
+    setCargado(true);
+  }, [cargado, editar, publicacionEditar]);
+
+  const cargarImagenes = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const archivos = Array.from(event.target.files ?? []);
+    if (!archivos.length) return;
+
+    const validos = archivos.filter((archivo) => {
+      if (!archivo.type.startsWith("image/")) {
+        toast.error(`${archivo.name} no es una imagen válida`);
+        return false;
+      }
+      if (archivo.size > 5 * 1024 * 1024) {
+        toast.error(`${archivo.name} supera el límite de 5 MB`);
+        return false;
+      }
+      return true;
+    });
+
+    Promise.all(
+      validos.map(
+        (archivo) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result));
+            reader.onerror = reject;
+            reader.readAsDataURL(archivo);
+          }),
+      ),
+    ).then((nuevas) => {
+      setImagenes((actuales) => [...actuales, ...nuevas].slice(0, 6));
+    });
+    event.target.value = "";
+  };
 
   const guardar = () => {
     const cant = Number(cantidad);
@@ -53,7 +119,7 @@ function Publicar() {
       toast.error("Indica el distrito");
       return;
     }
-    crearPublicacion({
+    const datos = {
       cultivo,
       variedad,
       cantidad: cant,
@@ -65,13 +131,29 @@ function Publicar() {
       fechaCosecha: fechaCosecha || new Date().toISOString().slice(0, 10),
       descripcion: descripcion.trim().slice(0, 600) || "Producto fresco de chacra.",
       estado,
-    });
-    toast.success("¡Publicación creada!");
+      imagenes,
+    };
+    if (editar && publicacionEditar) {
+      actualizarPublicacion(editar, {
+        ...datos,
+        agricultorId: publicacionEditar.agricultorId,
+        imagenes,
+        creada: publicacionEditar.creada,
+      });
+      toast.success("¡Publicación actualizada!");
+    } else {
+      crearPublicacion(datos);
+      toast.success("¡Publicación creada!");
+    }
     navigate({ to: "/mis-publicaciones" });
   };
 
   return (
-    <AppShell roles={["PRODUCTOR"]} title="Publicar producto" subtitle="Solo 3 pasos: producto, precio y fotos">
+    <AppShell
+      roles={["PRODUCTOR"]}
+      title={editar ? "Editar publicación" : "Publicar producto"}
+      subtitle={editar ? "Actualiza los datos de tu cosecha" : "Solo 3 pasos: producto, precio y fotos"}
+    >
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
         <Card className="gap-6 rounded-3xl p-6 shadow-soft md:p-8">
           <div className="grid gap-5 md:grid-cols-2">
@@ -172,19 +254,41 @@ function Publicar() {
           <div className="space-y-2">
             <Label>Fotografías</Label>
             <div className="flex flex-wrap gap-4">
-              {IMAGENES[cultivo].map((src) => (
-                <img key={src} src={src} alt="" loading="lazy" width={160} height={120} className="size-28 rounded-2xl object-cover" />
+              {imagenes.map((src, index) => (
+                <div key={`${src}-${index}`} className="relative">
+                  <img src={src} alt={`Imagen ${index + 1} del producto`} loading="lazy" width={160} height={120} className="size-28 rounded-2xl object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setImagenes((actuales) => actuales.filter((_, i) => i !== index))}
+                    className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-full bg-black/70 text-white"
+                    aria-label={`Eliminar imagen ${index + 1}`}
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
               ))}
-              <div className="flex size-28 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed text-muted-foreground">
+              {imagenes.length < 6 && <button
+                type="button"
+                onClick={() => inputImagenes.current?.click()}
+                className="flex size-28 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
                 <ImagePlus className="size-6" />
                 <span className="text-xs">Agregar</span>
-              </div>
+              </button>}
+              <input
+                ref={inputImagenes}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                className="sr-only"
+                onChange={cargarImagenes}
+              />
             </div>
-            <p className="text-xs text-muted-foreground">En producción las imágenes se suben a Cloudinary.</p>
+            <p className="text-xs text-muted-foreground">Puedes cargar hasta 6 imágenes JPG, PNG o WebP de máximo 5 MB cada una.</p>
           </div>
 
           <Button size="lg" className="h-14 rounded-2xl text-base" onClick={guardar}>
-            <Check className="mr-2 size-5" /> Publicar producto
+            <Check className="mr-2 size-5" /> {editar ? "Guardar cambios" : "Publicar producto"}
           </Button>
         </Card>
 

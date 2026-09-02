@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { registrarAgricultor } from "./store";
+import { guardarCompradorEnDB } from "./db";
 
 export type Rol = "PRODUCTOR" | "COMPRADOR" | "ADMINISTRADOR";
 
@@ -138,6 +139,9 @@ export function iniciarSesion(email: string, password: string): { ok: boolean; e
     return { ok: false, error: "Correo o contraseña incorrectos" };
   }
   state = { ...state, sesion: u.id };
+  if (u.rol === "COMPRADOR") {
+    void guardarCompradorEnDB({ data: { id: u.id, nombre: u.nombre, email: u.email } });
+  }
   persistir();
   emit();
   return { ok: true, rol: u.rol };
@@ -165,6 +169,9 @@ export function registrar(input: {
   };
   if (nuevo.agricultorId) {
     registrarAgricultor({ id: nuevo.agricultorId, nombre });
+  }
+  if (nuevo.rol === "COMPRADOR") {
+    void guardarCompradorEnDB({ data: { id: nuevo.id, nombre: nuevo.nombre, email: nuevo.email } });
   }
   state = { ...state, usuarios: [...state.usuarios, nuevo], sesion: id };
   persistir();

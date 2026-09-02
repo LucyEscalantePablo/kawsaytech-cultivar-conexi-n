@@ -64,6 +64,7 @@ export interface Publicacion {
 export interface Solicitud {
   id: string;
   publicacionId: string;
+  compradorId?: string;
   comprador: string;
   compradorEmail?: string;
   cantidad: number;

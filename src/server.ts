@@ -1,7 +1,10 @@
 import "./lib/error-capture";
 
+import { initializeDatabase } from "./lib/db";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+
+await initializeDatabase();
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;

@@ -9,7 +9,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:init": "docker compose exec -T postgres psql -U postgres -d kawsaytech -f /docker-entrypoint-initdb.d/01-init.sql"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.27",

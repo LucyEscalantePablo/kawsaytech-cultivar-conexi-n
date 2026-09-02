@@ -71,7 +71,7 @@ function MisPublicaciones() {
               </div>
               <div className="grid w-full grid-cols-2 gap-2 md:w-auto md:grid-cols-3">
                 <Button asChild variant="secondary" className="rounded-xl">
-                  <Link to="/producto/$id" params={{ id: p.id }}><Pencil className="mr-1 size-4" /> Ver / Editar</Link>
+                  <Link to="/publicar" search={{ editar: p.id }}><Pencil className="mr-1 size-4" /> Ver / Editar</Link>
                 </Button>
                 {p.estado === "pausada" ? (
                   <Button variant="secondary" className="rounded-xl" onClick={() => { actualizarEstado(p.id, "activa"); toast.success("Publicación activada"); }}>

@@ -15,6 +15,16 @@ import type {
   Entrega,
   PuntoAcopio,
 } from "./types";
+import {
+  guardarAgricultorEnDB,
+  guardarPublicacionEnDB,
+  actualizarEstadoPublicacionEnDB,
+  eliminarPublicacionEnDB,
+  guardarSolicitudEnDB,
+  actualizarSolicitudEnDB,
+  guardarVentaEnDB,
+  cargarPublicacionesEnDB,
+} from "./db";
 
 /** Red nacional de puntos de acopio (datos de ejemplo del MVP). */
 export const PUNTOS_ACOPIO: PuntoAcopio[] = [
@@ -207,7 +217,7 @@ export let agricultores: Agricultor[] = [
   },
 ];
 
-let publicaciones: Publicacion[] = [
+export let publicaciones: Publicacion[] = [
   {
     id: "pub-1",
     cultivo: "papa",
@@ -297,7 +307,7 @@ let publicaciones: Publicacion[] = [
   },
 ];
 
-let solicitudes: Solicitud[] = [
+export let solicitudes: Solicitud[] = [
   {
     id: "sol-1",
     publicacionId: "pub-1",
@@ -341,7 +351,7 @@ let solicitudes: Solicitud[] = [
   },
 ];
 
-let ventas: Venta[] = [
+export let ventas: Venta[] = [
   {
     id: "ven-1",
     publicacionId: "pub-5",
@@ -371,14 +381,57 @@ let ventas: Venta[] = [
 
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
+let publicacionesCargadas = false;
+let cargaPublicacionesEnCurso: Promise<void> | undefined;
+
+export function cargarPublicaciones(forzar = false) {
+  if (publicacionesCargadas && !forzar) return cargaPublicacionesEnCurso;
+  if (cargaPublicacionesEnCurso) return cargaPublicacionesEnCurso;
+  publicacionesCargadas = false;
+  cargaPublicacionesEnCurso ??= cargarPublicacionesEnDB()
+    .then((datos) => {
+      if (datos.length) {
+        publicaciones = datos.map((publicacion) => ({
+          ...publicacion,
+          imagenes: publicacion.imagenes.length
+            ? publicacion.imagenes
+            : imagenesDe(publicacion.cultivo),
+        }));
+        emit();
+      }
+      publicacionesCargadas = true;
+    })
+    .catch((error) => {
+      console.error("No se pudieron cargar las publicaciones desde PostgreSQL:", error);
+    })
+    .finally(() => {
+      cargaPublicacionesEnCurso = undefined;
+    });
+  return cargaPublicacionesEnCurso;
+}
+
+const persist = async <T>(
+  action: (input: { data: T }) => Promise<{ ok: boolean }>,
+  payload: T,
+  label: string,
+) => {
+  try {
+    await action({ data: payload });
+  } catch (error) {
+    console.error(`DB save failed (${label}):`, error);
+  }
+};
 
 export function useKawsayData() {
   const [, setTick] = useState(0);
   useEffect(() => {
     const l = () => setTick((t) => t + 1);
     listeners.add(l);
+    void cargarPublicaciones();
+    const interval = window.setInterval(() => void cargarPublicaciones(true), 10000);
     return () => {
       listeners.delete(l);
+      window.clearInterval(interval);
     };
   }, []);
   return { publicaciones, solicitudes, ventas, agricultores };
@@ -400,19 +453,20 @@ export function registrarAgricultor({
   region?: string;
 }) {
   if (agricultores.some((a) => a.id === id)) return;
-  agricultores = [
-    ...agricultores,
-    {
-      id,
-      nombre,
-      region,
-      telefono: "+51 900 000 000",
-      calificacion: 5,
-      ventas: 0,
-      avatarColor: "bg-primary",
-    },
-  ];
+
+  const nuevo = {
+    id,
+    nombre,
+    region,
+    telefono: "+51 900 000 000",
+    calificacion: 5,
+    ventas: 0,
+    avatarColor: "bg-primary",
+  };
+
+  agricultores = [...agricultores, nuevo];
   emit();
+  void persist(guardarAgricultorEnDB, nuevo, "registrarAgricultor");
 }
 
 export function crearPublicacion(
@@ -428,29 +482,47 @@ export function crearPublicacion(
     agricultorId: data.agricultorId ?? AGRICULTOR_ACTUAL,
     creada: new Date().toISOString().slice(0, 10),
   };
+
   publicaciones = [nueva, ...publicaciones];
   emit();
+  void persist(guardarPublicacionEnDB, nueva, "crearPublicacion");
   return nueva;
+}
+
+export function actualizarPublicacion(id: string, cambios: Omit<Publicacion, "id">) {
+  const actualizada: Publicacion = { ...cambios, id };
+  publicaciones = publicaciones.map((p) => (p.id === id ? actualizada : p));
+  emit();
+  void persist(guardarPublicacionEnDB, actualizada, "actualizarPublicacion");
+  return actualizada;
 }
 
 export function actualizarEstado(id: string, estado: EstadoPublicacion) {
   publicaciones = publicaciones.map((p) => (p.id === id ? { ...p, estado } : p));
   emit();
+  void persist(actualizarEstadoPublicacionEnDB, { id, estado }, "actualizarEstado");
 }
 
 export function eliminarPublicacion(id: string) {
   publicaciones = publicaciones.filter((p) => p.id !== id);
   emit();
+  void persist(eliminarPublicacionEnDB, id, "eliminarPublicacion");
 }
 
 export function duplicarPublicacion(id: string) {
   const p = publicaciones.find((x) => x.id === id);
   if (!p) return;
-  publicaciones = [
-    { ...p, id: `pub-${Date.now()}`, estado: "pausada", creada: new Date().toISOString().slice(0, 10) },
-    ...publicaciones,
-  ];
+
+  const copia = {
+    ...p,
+    id: `pub-${Date.now()}`,
+    estado: "pausada" as EstadoPublicacion,
+    creada: new Date().toISOString().slice(0, 10),
+  };
+
+  publicaciones = [copia, ...publicaciones];
   emit();
+  void persist(guardarPublicacionEnDB, copia, "duplicarPublicacion");
 }
 
 export function crearSolicitud(data: Omit<Solicitud, "id" | "creada" | "estado">) {
@@ -460,29 +532,34 @@ export function crearSolicitud(data: Omit<Solicitud, "id" | "creada" | "estado">
     estado: "pendiente",
     creada: new Date().toISOString().slice(0, 10),
   };
+
   solicitudes = [nueva, ...solicitudes];
   emit();
+  void persist(guardarSolicitudEnDB, nueva, "crearSolicitud");
   return nueva;
 }
 
 export function responderSolicitud(id: string, estado: Solicitud["estado"]) {
   const sol = solicitudes.find((s) => s.id === id);
   solicitudes = solicitudes.map((s) => (s.id === id ? { ...s, estado } : s));
-  if (sol && estado === "aceptada") {
-    ventas = [
-      {
-        id: `ven-${Date.now()}`,
-        publicacionId: sol.publicacionId,
-        comprador: sol.comprador,
-        compradorEmail: sol.compradorEmail ?? "",
-        cantidad: sol.cantidad,
-        precio: sol.precioOfrecido,
-        fecha: new Date().toISOString().slice(0, 10),
-      },
-      ...ventas,
-    ];
-  }
   emit();
+
+  void persist(actualizarSolicitudEnDB, { id, estado }, "responderSolicitud");
+
+  if (sol && estado === "aceptada") {
+    const nuevaVenta: Venta = {
+      id: `ven-${Date.now()}`,
+      publicacionId: sol.publicacionId,
+      comprador: sol.comprador,
+      compradorEmail: sol.compradorEmail ?? "",
+      cantidad: sol.cantidad,
+      precio: sol.precioOfrecido,
+      fecha: new Date().toISOString().slice(0, 10),
+    };
+
+    ventas = [nuevaVenta, ...ventas];
+    void persist(guardarVentaEnDB, nuevaVenta, "guardarVenta");
+  }
 }
 
 /** Paso 7: guarda la modalidad de entrega y pasa la solicitud a "coordinada". */
@@ -490,22 +567,23 @@ export function coordinarEntrega(
   id: string,
   entrega: Omit<Entrega, "fecha"> & { fecha?: string },
 ) {
+  const entregaCompleta = { ...entrega, fecha: entrega.fecha ?? new Date().toISOString().slice(0, 10) };
   solicitudes = solicitudes.map((s) =>
-    s.id === id
-      ? {
-          ...s,
-          estado: "coordinada",
-          entrega: { ...entrega, fecha: entrega.fecha ?? new Date().toISOString().slice(0, 10) },
-        }
-      : s,
+    s.id === id ? { ...s, estado: "coordinada", entrega: entregaCompleta } : s,
   );
   emit();
+  void persist(
+    actualizarSolicitudEnDB,
+    { id, estado: "coordinada", entrega: entregaCompleta },
+    "coordinarEntrega",
+  );
 }
 
 /** Paso 8: cierra la transacción como completada. */
 export function completarSolicitud(id: string) {
   solicitudes = solicitudes.map((s) => (s.id === id ? { ...s, estado: "completada" } : s));
   emit();
+  void persist(actualizarSolicitudEnDB, { id, estado: "completada" }, "completarSolicitud");
 }
 
 export const soles = (n: number) =>

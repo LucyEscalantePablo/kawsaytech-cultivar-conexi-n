@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: kawsaytech
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: "11111"
     ports:
       - "5432:5432"
     volumes:

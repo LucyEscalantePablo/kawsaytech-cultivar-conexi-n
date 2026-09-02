@@ -101,6 +101,7 @@ function DetalleProducto() {
     }
     crearSolicitud({
       publicacionId: pub.id,
+      compradorId: usuario?.id,
       comprador: usuario?.nombre ?? "Comprador",
       compradorEmail: usuario?.email ?? "",
       cantidad: cant,
@@ -190,7 +191,7 @@ function DetalleProducto() {
               {esPropietario ? (
                 <div className="grid gap-3">
                   <Button asChild size="lg" className="h-14 w-full rounded-2xl text-base">
-                    <Link to="/mis-publicaciones">
+                    <Link to="/publicar" search={{ editar: pub.id }}>
                       <Pencil className="mr-2 size-5" /> Editar publicación
                     </Link>
                   </Button>
