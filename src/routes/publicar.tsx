@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/lib/kawsay/auth";
 import {
   CULTIVOS,
   IMAGENES,
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/publicar")({
 
 function Publicar() {
   const navigate = useNavigate();
+  const { usuario } = useAuth();
   const { editar } = useSearch({ from: "/publicar" });
   const publicacionEditar = editar ? getPublicacion(editar) : undefined;
   const [cargado, setCargado] = useState(false);
@@ -133,16 +135,21 @@ function Publicar() {
       estado,
       imagenes,
     };
+    const agricultorId = usuario?.agricultorId ?? publicacionEditar?.agricultorId ?? "ag-1";
+
     if (editar && publicacionEditar) {
       actualizarPublicacion(editar, {
         ...datos,
-        agricultorId: publicacionEditar.agricultorId,
+        agricultorId,
         imagenes,
         creada: publicacionEditar.creada,
       });
       toast.success("¡Publicación actualizada!");
     } else {
-      crearPublicacion(datos);
+      crearPublicacion({
+        ...datos,
+        agricultorId,
+      });
       toast.success("¡Publicación creada!");
     }
     navigate({ to: "/mis-publicaciones" });

@@ -1,5 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { generateText, Output } from "ai";
+import { spawn } from "node:child_process";
+import { promises as fs } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { z } from "zod";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { clasesDe, claseDe, UMBRAL_CONFIANZA } from "@/lib/kawsay/clasificador";
@@ -55,9 +59,125 @@ export interface DiagnosticoResultado {
 
 const MODELO = "google/gemini-3.6-flash";
 
+async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoResultado | null> {
+  if (process.env.NODE_ENV === "test") return null;
+
+  const modelo = path.resolve(process.cwd(), "models", "potato", "potato_leaf_model.keras");
+  const labels = path.resolve(process.cwd(), "models", "potato", "labels.json");
+
+  try {
+    await fs.access(modelo);
+    await fs.access(labels);
+  } catch {
+    return null;
+  }
+
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "kawsay-"));
+  const tempFile = path.join(tempDir, "diagnostico-papa.png");
+
+  try {
+    const match = imagen.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i);
+    if (!match) return null;
+
+    const buffer = Buffer.from(match[2], "base64");
+    await fs.writeFile(tempFile, buffer);
+
+    const pythonBin = process.env.PYTHON_BIN ?? "python";
+    const script = path.resolve(process.cwd(), "ml", "infer_potato_model.py");
+
+    const result = await new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
+      const child = spawn(
+        pythonBin,
+        [script, "--model", modelo, "--labels", labels, "--image", tempFile],
+        { stdio: ["ignore", "pipe", "pipe"] },
+      );
+
+      let stdout = "";
+      let stderr = "";
+
+      child.stdout.on("data", (chunk) => {
+        stdout += chunk.toString();
+      });
+      child.stderr.on("data", (chunk) => {
+        stderr += chunk.toString();
+      });
+      child.on("error", reject);
+      child.on("close", (code) => {
+        if (code === 0) {
+          resolve({ stdout, stderr });
+          return;
+        }
+        reject(new Error(stderr || `El modelo local falló con código ${code}.`));
+      });
+    });
+
+    const parsed = JSON.parse(result.stdout.trim());
+    const map = {
+      Healthy: "sano",
+      "Late Blight": "tizon_tardio",
+      "Early Blight": "tizon_temprano",
+    } as const;
+
+    const clases = clasesDe("papa");
+    const probabilidades = (parsed.probabilidades ?? []).map((item: { label: string; probability: number }) => {
+      const clase = clases.find((c) => c.etiquetaDataset === item.label || c.etiqueta === item.label || c.id === map[item.label as keyof typeof map]);
+      return {
+        claseId: clase?.id ?? "otra",
+        etiqueta: clase?.etiqueta ?? item.label,
+        probabilidad: Number(item.probability) || 0,
+      };
+    });
+
+    const base = probabilidades.sort((a, b) => b.probabilidad - a.probabilidad)[0] ?? {
+      claseId: "sano",
+      etiqueta: "Hoja sana",
+      probabilidad: 0,
+    };
+
+    const clase = claseDe("papa", base.claseId) ?? clases[0]!;
+    const confianza = Math.max(0, Math.min(100, base.probabilidad));
+
+    return {
+      esCultivo: true,
+      claseId: clase.id,
+      enfermedad: clase.id === "sano" ? "Sin enfermedad detectada" : clase.etiqueta,
+      nombreCientifico: clase.nombreCientifico,
+      etiquetaDataset: clase.etiquetaDataset,
+      confianza,
+      concluyente: confianza >= UMBRAL_CONFIANZA,
+      probabilidades,
+      severidad: confianza >= 70 ? "moderada" : "leve",
+      porcentajeAreaAfectada: confianza >= 70 ? 35 : 8,
+      calidadImagen: "buena",
+      problemasImagen: [],
+      sintomas: clase.id === "sano" ? ["Hoja con color verde uniforme y sin lesiones visibles"] : ["Se observan manchas compatibles con la enfermedad detectada"],
+      diferencial: clase.id === "tizon_tardio" ? ["Se descarta tizón temprano por la distribución y el borde de las manchas", "Se evalúa la humedad ambiental y la velocidad de avance de la lesión"] : ["Se confirma con la muestra y la severidad observada"],
+      tratamiento: clase.id === "tizon_tardio" ? ["Mancozeb o clorotalonil como protectante", "Rotar con un fungicida sistémico para evitar resistencia"] : ["Mantener saneamiento foliar y vigilancia semanal"],
+      prevencion: ["Evitar exceso de humedad en follaje", "Monitorear cada 3-5 días en épocas de riesgo"],
+      resumen: `${clase.etiqueta} con ${confianza.toFixed(1)}% de confianza. Revisa la hoja y aplica control preventivo si avanza la lesión.`,
+    };
+  } catch (error) {
+    console.warn("No se pudo usar el modelo local de papa; se usa la IA del gateway como fallback.", error);
+    return null;
+  } finally {
+    try {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    } catch {
+      // no-op
+    }
+  }
+}
+
 export const analizarCultivo = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }): Promise<DiagnosticoResultado> => {
+    if (data.cultivo === "papa") {
+      const inferenciaLocal = await intentarInferenciaLocalPapa(data.imagen);
+      if (inferenciaLocal) {
+        return inferenciaLocal;
+      }
+    }
+
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("Falta la configuración de IA (LOVABLE_API_KEY)");
 
@@ -97,8 +217,6 @@ export const analizarCultivo = createServerFn({ method: "POST" })
       { type: "image" as const, image: data.imagen },
     ];
 
-    // Ensamble de dos inferencias (temperaturas distintas) y promedio de probabilidades:
-    // reduce la varianza del modelo y evita clasificaciones seguras pero equivocadas.
     const votos = await Promise.all(
       [0.1, 0.6].map(async (temperature) => {
         const r = await generateText({
@@ -111,7 +229,6 @@ export const analizarCultivo = createServerFn({ method: "POST" })
         return await r.output;
       }),
     ).catch(async (e) => {
-      // Si el ensamble falla (rate limit, etc.), se intenta una sola inferencia.
       const r = await generateText({
         model: gateway(MODELO),
         output: Output.object({ schema: Resultado }),

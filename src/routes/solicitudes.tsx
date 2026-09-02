@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/lib/kawsay/auth";
 import { CULTIVOS, getPublicacion, responderSolicitud, soles, useKawsayData } from "@/lib/kawsay/store";
 import { EntregaPanel, PasosEntrega } from "@/components/kawsay/EntregaPanel";
 import type { Solicitud } from "@/lib/kawsay/types";
@@ -74,12 +75,17 @@ function Fila({ s }: { s: Solicitud }) {
 }
 
 function Solicitudes() {
-  const { solicitudes } = useKawsayData();
+  const { usuario } = useAuth();
+  const { publicaciones, solicitudes } = useKawsayData();
+  const agId = usuario?.agricultorId ?? "ag-1";
+  const misIds = new Set(publicaciones.filter((p) => p.agricultorId === agId).map((p) => p.id));
+  const solicitudesDelProductor = solicitudes.filter((s) => misIds.has(s.publicacionId));
+
   const grupos = {
-    pendiente: solicitudes.filter((s) => s.estado === "pendiente"),
-    aceptada: solicitudes.filter((s) => s.estado === "aceptada" || s.estado === "coordinada"),
-    completada: solicitudes.filter((s) => s.estado === "completada"),
-    rechazada: solicitudes.filter((s) => s.estado === "rechazada"),
+    pendiente: solicitudesDelProductor.filter((s) => s.estado === "pendiente"),
+    aceptada: solicitudesDelProductor.filter((s) => s.estado === "aceptada" || s.estado === "coordinada"),
+    completada: solicitudesDelProductor.filter((s) => s.estado === "completada"),
+    rechazada: solicitudesDelProductor.filter((s) => s.estado === "rechazada"),
   };
 
   return (
