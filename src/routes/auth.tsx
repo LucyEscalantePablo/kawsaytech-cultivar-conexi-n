@@ -31,6 +31,7 @@ function Auth() {
   const { rol } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rNombre, setRNombre] = useState("");
   const [rEmail, setREmail] = useState("");
   const [rPassword, setRPassword] = useState("");
   const [rRol, setRRol] = useState<Rol | "">("");
@@ -62,7 +63,12 @@ function Auth() {
       toast.error("Selecciona qué tipo de usuario eres");
       return;
     }
-    const res = registrar({ email: rEmail, password: rPassword, rol: rRol });
+    const nombre = rNombre.trim();
+    if (!nombre) {
+      toast.error("Ingresa tu nombre completo");
+      return;
+    }
+    const res = registrar({ nombre, email: rEmail, password: rPassword, rol: rRol });
     if (!res.ok) {
       toast.error(res.error ?? "No pudimos crear la cuenta");
       return;
@@ -125,6 +131,10 @@ function Auth() {
             </TabsContent>
 
             <TabsContent value="registro" className="mt-6 space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="rnombre">Nombre completo</Label>
+                <Input id="rnombre" type="text" autoComplete="name" value={rNombre} onChange={(e) => setRNombre(e.target.value)} className="h-12 rounded-xl" placeholder="Tu nombre" />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="remail">Correo electrónico</Label>
                 <Input id="remail" type="email" autoComplete="email" value={rEmail} onChange={(e) => setREmail(e.target.value)} className="h-12 rounded-xl" placeholder="tucorreo@ejemplo.com" />

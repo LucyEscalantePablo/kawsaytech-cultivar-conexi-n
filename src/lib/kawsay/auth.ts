@@ -10,6 +10,9 @@ export interface Usuario {
   email: string;
   password: string;
   rol: Rol;
+  telefono?: string;
+  region?: string;
+  areaCultivada?: number;
   /** Solo para PRODUCTOR: vincula al registro de agricultor. */
   agricultorId?: string;
 }
@@ -151,24 +154,26 @@ export function registrar(input: {
   email: string;
   password: string;
   rol: Rol;
+  nombre?: string;
 }): { ok: boolean; error?: string; rol?: Rol } {
   hidratar();
   const email = input.email.trim().toLowerCase();
   if (state.usuarios.some((u) => u.email.toLowerCase() === email)) {
     return { ok: false, error: "Ya existe una cuenta con ese correo" };
   }
-  const nombre = email.split("@")[0]!.replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const nombre = (input.nombre ?? email.split("@")[0]!).trim();
+  const nombreFinal = nombre || email.split("@")[0]!.replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   const id = `u-${Date.now()}`;
   const nuevo: Usuario = {
     id,
-    nombre,
+    nombre: nombreFinal,
     email,
     password: input.password,
     rol: input.rol,
     ...(input.rol === "PRODUCTOR" ? { agricultorId: `ag-${Date.now()}` } : {}),
   };
   if (nuevo.agricultorId) {
-    registrarAgricultor({ id: nuevo.agricultorId, nombre });
+    registrarAgricultor({ id: nuevo.agricultorId, nombre: nombreFinal });
   }
   if (nuevo.rol === "COMPRADOR") {
     void guardarCompradorEnDB({ data: { id: nuevo.id, nombre: nuevo.nombre, email: nuevo.email } });
@@ -177,6 +182,32 @@ export function registrar(input: {
   persistir();
   emit();
   return { ok: true, rol: nuevo.rol };
+}
+
+export function actualizarPerfil(input: {
+  id: string;
+  nombre?: string;
+  telefono?: string;
+  region?: string;
+  areaCultivada?: number;
+}) {
+  const nombre = input.nombre?.trim();
+  state = {
+    ...state,
+    usuarios: state.usuarios.map((u) =>
+      u.id === input.id
+        ? {
+            ...u,
+            ...(nombre ? { nombre } : {}),
+            ...(input.telefono !== undefined ? { telefono: input.telefono.trim() || undefined } : {}),
+            ...(input.region !== undefined ? { region: input.region.trim() || undefined } : {}),
+            ...(input.areaCultivada !== undefined ? { areaCultivada: input.areaCultivada } : {}),
+          }
+        : u,
+    ),
+  };
+  persistir();
+  emit();
 }
 
 export function cerrarSesion() {

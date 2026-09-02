@@ -7,6 +7,8 @@ const connectionString =
 export const pool = new Pool({
   connectionString,
   max: 10,
+  connectionTimeoutMillis: 1500,
+  idleTimeoutMillis: 1500,
   ssl:
     process.env.DATABASE_SSL === "true"
       ? { rejectUnauthorized: false }
@@ -27,24 +29,31 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
 
 export async function initializeDatabase() {
   try {
-    await query(`
-      CREATE TABLE IF NOT EXISTS compradores (
-        id TEXT PRIMARY KEY,
-        nombre TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `);
-    await query(`
-      ALTER TABLE solicitudes
-      ADD COLUMN IF NOT EXISTS comprador_id TEXT REFERENCES compradores(id)
-    `);
-    await query(`CREATE INDEX IF NOT EXISTS idx_compradores_email ON compradores(email)`);
-    await query(`SELECT 1`);
-    console.log("PostgreSQL connected successfully.");
+    await Promise.race([
+      (async () => {
+        await query(`
+          CREATE TABLE IF NOT EXISTS compradores (
+            id TEXT PRIMARY KEY,
+            nombre TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+          )
+        `);
+        await query(`
+          ALTER TABLE solicitudes
+          ADD COLUMN IF NOT EXISTS comprador_id TEXT REFERENCES compradores(id)
+        `);
+        await query(`CREATE INDEX IF NOT EXISTS idx_compradores_email ON compradores(email)`);
+        await query(`SELECT 1`);
+        console.log("PostgreSQL connected successfully.");
+      })(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("PostgreSQL startup timeout")), 2000),
+      ),
+    ]);
   } catch (error) {
-    console.error("PostgreSQL connection error:", error);
+    console.warn("PostgreSQL unavailable during startup; continuing without the database.", error);
   }
 }
 

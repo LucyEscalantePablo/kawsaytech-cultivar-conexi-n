@@ -89,6 +89,12 @@ function DetalleProducto() {
   const esFavorito = favoritos.includes(pub.id);
 
   const enviar = () => {
+    if (!usuario) {
+      toast.error("Debes iniciar sesión para solicitar una compra");
+      navigate({ to: "/auth", replace: true });
+      return;
+    }
+
     const cant = Number(cantidad);
     const prec = Number(precio);
     if (!cant || cant <= 0 || cant > pub.cantidad) {
@@ -101,9 +107,11 @@ function DetalleProducto() {
     }
     crearSolicitud({
       publicacionId: pub.id,
-      compradorId: usuario?.id,
-      comprador: usuario?.nombre ?? "Comprador",
-      compradorEmail: usuario?.email ?? "",
+      compradorId: usuario.id,
+      comprador: usuario.nombre || "Comprador",
+      compradorEmail: usuario.email,
+      compradorTelefono: usuario.telefono ?? "",
+      compradorRegion: usuario.region ?? "Lima",
       cantidad: cant,
       precioOfrecido: prec,
       mensaje: mensaje.slice(0, 500),

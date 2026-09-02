@@ -402,7 +402,9 @@ export function cargarPublicaciones(forzar = false) {
       publicacionesCargadas = true;
     })
     .catch((error) => {
-      console.error("No se pudieron cargar las publicaciones desde PostgreSQL:", error);
+      console.warn("No se pudieron cargar las publicaciones desde PostgreSQL; se mantiene la demo local.", error);
+      publicacionesCargadas = true;
+      emit();
     })
     .finally(() => {
       cargaPublicacionesEnCurso = undefined;
@@ -467,6 +469,19 @@ export function registrarAgricultor({
   agricultores = [...agricultores, nuevo];
   emit();
   void persist(guardarAgricultorEnDB, nuevo, "registrarAgricultor");
+}
+
+export function actualizarAgricultorPerfil(
+  id: string,
+  cambios: Partial<Pick<Agricultor, "nombre" | "region" | "telefono" | "avatarColor">>,
+) {
+  const actual = agricultores.find((a) => a.id === id);
+  if (!actual) return;
+
+  const actualizado = { ...actual, ...cambios };
+  agricultores = agricultores.map((a) => (a.id === id ? actualizado : a));
+  emit();
+  void persist(guardarAgricultorEnDB, actualizado, "actualizarAgricultorPerfil");
 }
 
 export function crearPublicacion(

@@ -14,7 +14,7 @@ const normalizeEntity = <T>(value: unknown) => value as T;
 
 export const cargarPublicacionesEnDB = createServerFn({ method: "GET" })
   .handler(async () => {
-    return withDbErrorHandling("cargarPublicacionesEnDB", async () => {
+    try {
       const { query } = await import("@/lib/db");
       const result = await query<{
         id: string;
@@ -53,7 +53,10 @@ export const cargarPublicacionesEnDB = createServerFn({ method: "GET" })
         agricultorId: p.agricultor_id,
         creada: String(p.creada).slice(0, 10),
       } satisfies Publicacion));
-    });
+    } catch (error) {
+      console.warn("PostgreSQL no disponible; usando datos locales de la app.", error);
+      return [];
+    }
   });
 
 export const guardarCompradorEnDB = createServerFn({ method: "POST" })
