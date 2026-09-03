@@ -23,7 +23,11 @@ data/
 
 ## Instalación
 
+<<<<<<< Updated upstream
 Importante: el entrenamiento real requiere Python 3.12.x. TensorFlow 2.16 no soporta Python 3.14 en Windows.
+=======
+Importante: el entrenamiento real requiere Python 3.12.x. TensorFlow 2.16/2.17 no soporta Python 3.14 en Windows.
+>>>>>>> Stashed changes
 
 ```bash
 cd ml
@@ -32,7 +36,11 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+<<<<<<< Updated upstream
 Si no tienes Python 3.12 instalado, instálalo desde python.org o con un gestor como pyenv. En Windows, el intérprete 3.14 del entorno actual no es compatible con TensorFlow 2.16.
+=======
+Si no tienes Python 3.12 instalado, instálalo desde python.org o con un gestor como pyenv. En Windows, el intérprete 3.14 del entorno actual no es compatible con TensorFlow.
+>>>>>>> Stashed changes
 
 ## Entrenamiento
 

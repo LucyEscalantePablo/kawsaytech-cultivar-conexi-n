@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 tensorflow-cpu==2.16.0
+=======
+tensorflow-cpu==2.16.1
+>>>>>>> Stashed changes
 keras==3.0.0
 numpy>=1.26.0
 pandas>=2.2.0

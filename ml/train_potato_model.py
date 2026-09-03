@@ -57,7 +57,11 @@ def prepare_datasets(data_dir: str, img_size: int, batch_size: int):
     if not data_path.exists():
         raise FileNotFoundError(f"No se encontró la carpeta del dataset: {data_path}")
 
+<<<<<<< Updated upstream
     train_ds = image_dataset.image_dataset_from_directory(
+=======
+    train_ds = tf.keras.utils.image_dataset_from_directory(
+>>>>>>> Stashed changes
         data_path,
         validation_split=0.2,
         subset="training",
@@ -67,7 +71,11 @@ def prepare_datasets(data_dir: str, img_size: int, batch_size: int):
         label_mode="int",
         color_mode="rgb",
     )
+<<<<<<< Updated upstream
     val_ds = image_dataset.image_dataset_from_directory(
+=======
+    val_ds = tf.keras.utils.image_dataset_from_directory(
+>>>>>>> Stashed changes
         data_path,
         validation_split=0.2,
         subset="validation",
