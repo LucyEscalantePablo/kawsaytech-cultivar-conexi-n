@@ -11,7 +11,7 @@ import { clasesDe, claseDe, UMBRAL_CONFIANZA } from "@/lib/kawsay/clasificador";
 const Input = z.object({
   cultivo: z.enum(["papa", "palta"]),
   /** Data URL (data:image/...;base64,...) de la foto tomada por el agricultor. */
-  imagen: z.string().min(32),
+  imagen: z.string().min(32).nullable().optional(),
   nota: z.string().max(500).optional(),
 });
 
@@ -46,7 +46,7 @@ export interface DiagnosticoResultado {
   confianza: number;
   concluyente: boolean;
   probabilidades: Probabilidad[];
-  severidad: "leve" | "moderada" | "severa";
+  severidad: "sana" | "leve" | "moderada" | "severa" | "muy_severa";
   porcentajeAreaAfectada: number;
   calidadImagen: "buena" | "regular" | "mala";
   problemasImagen: string[];
@@ -82,7 +82,11 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
     const buffer = Buffer.from(match[2], "base64");
     await fs.writeFile(tempFile, buffer);
 
+<<<<<<< Updated upstream
     const pythonBin = process.env.PYTHON_BIN ?? "python";
+=======
+    const pythonBin = process.env.PYTHON_BIN ?? (await encontrarPythonLocal());
+>>>>>>> Stashed changes
     const script = path.resolve(process.cwd(), "ml", "infer_potato_model.py");
 
     const result = await new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
@@ -136,6 +140,11 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
 
     const clase = claseDe("papa", base.claseId) ?? clases[0]!;
     const confianza = Math.max(0, Math.min(100, base.probabilidad));
+<<<<<<< Updated upstream
+=======
+    const porcentajeAreaAfectada = clase.id === "sano" ? 0 : Math.round(Number(parsed.lesion_area) || 0);
+    const severidad = clasificarSeveridad(clase.id, porcentajeAreaAfectada);
+>>>>>>> Stashed changes
 
     return {
       esCultivo: true,
@@ -146,8 +155,13 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
       confianza,
       concluyente: confianza >= UMBRAL_CONFIANZA,
       probabilidades,
+<<<<<<< Updated upstream
       severidad: confianza >= 70 ? "moderada" : "leve",
       porcentajeAreaAfectada: confianza >= 70 ? 35 : 8,
+=======
+      severidad,
+      porcentajeAreaAfectada,
+>>>>>>> Stashed changes
       calidadImagen: "buena",
       problemasImagen: [],
       sintomas: clase.id === "sano" ? ["Hoja con color verde uniforme y sin lesiones visibles"] : ["Se observan manchas compatibles con la enfermedad detectada"],
@@ -168,9 +182,34 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
   }
 }
 
+<<<<<<< Updated upstream
 export const analizarCultivo = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }): Promise<DiagnosticoResultado> => {
+=======
+async function encontrarPythonLocal(): Promise<string> {
+  const rutas = [
+    path.resolve(process.cwd(), ".venv312", "Scripts", "python.exe"),
+    path.resolve(process.cwd(), ".venv", "Scripts", "python.exe"),
+  ];
+  for (const ruta of rutas) {
+    try {
+      await fs.access(ruta);
+      return ruta;
+    } catch {
+      continue;
+    }
+  }
+  return "python";
+}
+
+export const analizarCultivo = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => Input.parse(data))
+  .handler(async ({ data }): Promise<DiagnosticoResultado> => {
+    if (!data.imagen) {
+      return diagnosticarDesdeNota(data.nota ?? "");
+    }
+>>>>>>> Stashed changes
     if (data.cultivo === "papa") {
       const inferenciaLocal = await intentarInferenciaLocalPapa(data.imagen);
       if (inferenciaLocal) {
@@ -197,7 +236,7 @@ export const analizarCultivo = createServerFn({ method: "POST" })
       "3) Describe las lesiones observadas: color, forma, borde, distribución, presencia de anillos concéntricos, halo clorótico o esporulación.\n" +
       "4) Asigna una probabilidad a CADA clase de la taxonomía; la suma debe ser 100. claseId = clase con mayor probabilidad.\n" +
       "5) Justifica el diagnóstico diferencial: por qué descartas las otras clases (usa los rasgos distintivos, no frases genéricas).\n" +
-      "6) Estima el porcentaje de área foliar afectada y deriva la severidad: <10% leve, 10-40% moderada, >40% severa.\n\n" +
+      "6) Estima el porcentaje de área foliar afectada y deriva una de estas categorías: hoja sana si no hay lesiones; leve si hay menos de 10%; moderada entre 10% y 40%; grave entre 40% y 70%; muy grave si supera 70%.\n\n" +
       `Taxonomía de clases válidas para ${data.cultivo}:\n${taxonomia}\n\n` +
       "Reglas: responde en español simple para un pequeño productor andino; no inventes lesiones que no se vean; " +
       "si la evidencia es ambigua, reparte la probabilidad y baja la confianza en lugar de forzar una clase; " +
@@ -242,6 +281,41 @@ export const analizarCultivo = createServerFn({ method: "POST" })
 
     return combinar(data.cultivo, votos);
   });
+
+function diagnosticarDesdeNota(nota: string): DiagnosticoResultado {
+  const texto = nota.toLowerCase();
+  const esSana = /sana|saludable|sin lesión|sin manchas|verde uniforme/.test(texto);
+  const esMuyGrave = /muy grave|más de 70|70%|80%|90%|100%/.test(texto);
+  const esGrave = /grave|necrosis extensa|más de 40|50%|60%/.test(texto);
+  const esModerada = /moderada|entre 10|20%|30%|40%/.test(texto);
+  const claseId = esSana ? "sano" : "tizon_tardio";
+  const porcentajeAreaAfectada = esSana ? 0 : esMuyGrave ? 80 : esGrave ? 55 : esModerada ? 25 : 5;
+  const clase = claseDe("papa", claseId)!;
+  const severidad = clasificarSeveridad(claseId, porcentajeAreaAfectada);
+
+  return {
+    esCultivo: true,
+    claseId,
+    enfermedad: claseId === "sano" ? "Sin enfermedad detectada" : clase.etiqueta,
+    nombreCientifico: clase.nombreCientifico,
+    etiquetaDataset: clase.etiquetaDataset,
+    confianza: 85,
+    concluyente: true,
+    probabilidades: [
+      { claseId, etiqueta: clase.etiqueta, probabilidad: 85 },
+      { claseId: claseId === "sano" ? "tizon_tardio" : "sano", etiqueta: claseId === "sano" ? "Tizón tardío (rancha)" : "Hoja sana", probabilidad: 15 },
+    ],
+    severidad,
+    porcentajeAreaAfectada,
+    calidadImagen: "regular",
+    problemasImagen: ["Resultado basado en la descripción escrita; agrega una foto para confirmar visualmente."],
+    sintomas: nota ? [nota] : ["No se proporcionó una observación."],
+    diferencial: ["La clasificación por texto es orientativa y no sustituye una fotografía de la lesión."],
+    tratamiento: claseId === "sano" ? ["Mantener saneamiento foliar y vigilancia semanal"] : ["Confirmar con una fotografía y un ingeniero agrónomo antes de aplicar productos"],
+    prevencion: ["Monitorear cada 3-5 días en épocas de riesgo"],
+    resumen: `Clasificación orientativa por descripción: ${etiquetaSeveridadTexto(severidad)}.`,
+  };
+}
 
 type Voto = z.infer<typeof Resultado>;
 
@@ -297,14 +371,7 @@ function combinar(cultivo: "papa" | "palta", votos: Voto[]): DiagnosticoResultad
     ),
   );
   const sevTexto = (base.severidad ?? "").toLowerCase();
-  const severidad: DiagnosticoResultado["severidad"] =
-    clase.id === "sano"
-      ? "leve"
-      : area > 40 || sevTexto.startsWith("sev")
-        ? "severa"
-        : area >= 10 || sevTexto.startsWith("mod")
-          ? "moderada"
-          : "leve";
+  const severidad = clasificarSeveridad(clase.id, area, sevTexto);
 
   const cal = (base.calidadImagen ?? "").toLowerCase();
   const calidadImagen: DiagnosticoResultado["calidadImagen"] = cal.startsWith("mal")
@@ -332,6 +399,25 @@ function combinar(cultivo: "papa" | "palta", votos: Voto[]): DiagnosticoResultad
     prevencion: (base.prevencion ?? unir(validos.map((v) => v.prevencion ?? []))).slice(0, 5),
     resumen: base.resumen ?? "",
   };
+}
+
+function clasificarSeveridad(
+  claseId: string,
+  area: number,
+  severidadInformada = "",
+): DiagnosticoResultado["severidad"] {
+  if (claseId === "sano") return "sana";
+  if (area > 70 || severidadInformada.includes("muy")) return "muy_severa";
+  if (area > 40 || severidadInformada.startsWith("sev")) return "severa";
+  if (area >= 10 || severidadInformada.startsWith("mod")) return "moderada";
+  return "leve";
+}
+
+function etiquetaSeveridadTexto(severidad: DiagnosticoResultado["severidad"]): string {
+  if (severidad === "sana") return "hoja sana";
+  if (severidad === "muy_severa") return "severidad muy grave";
+  if (severidad === "severa") return "severidad grave";
+  return `severidad ${severidad}`;
 }
 
 function esNumero(n: number | undefined): n is number {

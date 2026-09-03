@@ -8,10 +8,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from keras import layers, models
+<<<<<<< Updated upstream
 from keras.src.applications import MobileNetV2
 from sklearn.metrics import classification_report, confusion_matrix
 from tensorflow.keras import callbacks as kcallbacks
 from tensorflow.keras.preprocessing import image_dataset
+=======
+from tensorflow.keras.applications import MobileNetV2
+from sklearn.metrics import classification_report, confusion_matrix
+from tensorflow.keras import callbacks as kcallbacks
+>>>>>>> Stashed changes
 
 CLASS_NAMES = ["Healthy", "Late Blight"]
 

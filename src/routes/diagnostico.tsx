@@ -42,9 +42,11 @@ interface Registro extends DiagnosticoResultado {
 }
 
 const severidadColor: Record<string, string> = {
+  sana: "bg-success text-success-foreground",
   leve: "bg-success text-success-foreground",
   moderada: "bg-harvest text-harvest-foreground",
   severa: "bg-destructive text-destructive-foreground",
+  muy_severa: "bg-destructive text-destructive-foreground",
 };
 
 function DiagnosticoPage() {
@@ -57,7 +59,7 @@ function DiagnosticoPage() {
 
   const mutacion = useMutation({
     mutationFn: async () => {
-      if (!imagen) throw new Error("Primero sube una fotografía del cultivo.");
+      if (!imagen && !nota.trim()) throw new Error("Sube una fotografía o describe lo que observas.");
       return await analizar({ data: { cultivo, imagen, nota: nota || undefined } });
     },
     onSuccess: (r) => {
@@ -65,22 +67,21 @@ function DiagnosticoPage() {
         toast.error("La foto no parece ser del cultivo seleccionado. Intenta con una hoja o fruto más cercano.");
         return;
       }
-      setHistorial((h) => [
-        {
-          ...r,
-          id: crypto.randomUUID(),
-          cultivo,
-          imagen: imagen!,
-          fecha: formatDateTimeShort(new Date()),
-        },
-        ...h,
-      ]);
+      const registro: Registro = {
+        ...r,
+        id: crypto.randomUUID(),
+        cultivo,
+        imagen: imagen!,
+        fecha: formatDateTimeShort(new Date()),
+      };
+      setHistorial((h) => [registro, ...h.filter((item) => item.imagen !== registro.imagen)]);
       toast.success("Análisis completado");
     },
     onError: (e: Error) => toast.error(e.message || "No se pudo analizar la imagen"),
   });
 
   const resultado = mutacion.data && mutacion.data.esCultivo ? mutacion.data : null;
+  const etiquetaResultado = resultado ? etiquetaSeveridad(resultado.severidad) : "";
 
   function cargar(file: File) {
     if (file.size > 6 * 1024 * 1024) {
@@ -130,9 +131,9 @@ function DiagnosticoPage() {
               ) : (
                 <>
                   <Camera className="size-10 text-muted-foreground" />
-                  <span className="font-semibold">Sube o toma una foto</span>
+                  <span className="font-semibold">Sube una foto o describe lo que observas</span>
                   <span className="text-sm text-muted-foreground">
-                    Acerca la cámara a la hoja o fruto afectado, con buena luz natural.
+                    Puedes probar el diagnóstico escribiendo los síntomas en el campo inferior.
                   </span>
                 </>
               )}
@@ -164,7 +165,7 @@ function DiagnosticoPage() {
           <div className="flex flex-wrap gap-3">
             <Button
               className="h-11 flex-1 rounded-xl"
-              disabled={!imagen || mutacion.isPending}
+              disabled={(!imagen && !nota.trim()) || mutacion.isPending}
               onClick={() => mutacion.mutate()}
             >
               {mutacion.isPending ? (
@@ -216,7 +217,7 @@ function DiagnosticoPage() {
                   </p>
                 </div>
                 <Badge className={`rounded-full ${severidadColor[resultado.severidad] ?? ""}`}>
-                  Severidad {resultado.severidad}
+                  {etiquetaResultado}
                 </Badge>
               </div>
 
@@ -282,6 +283,21 @@ function DiagnosticoPage() {
           )}
 
           <Card className="gap-3 rounded-3xl p-6 shadow-soft">
+            <p className="font-display text-sm font-bold">Criterio de clasificación</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {[
+                ["sana", "Hoja sana", "Sin lesiones visibles"],
+                ["leve", "Severidad leve", "Menos de 10% afectada"],
+                ["moderada", "Severidad moderada", "Entre 10% y 40% afectada"],
+                ["severa", "Severidad grave", "Más de 40% y hasta 70% afectada"],
+                ["muy_severa", "Severidad muy grave", "Más de 70% afectada"],
+              ].map(([id, label, description]) => (
+                <div key={id} className="rounded-xl border border-border p-3">
+                  <p className="text-sm font-semibold">{label}</p>
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                </div>
+              ))}
+            </div>
             <p className="font-display text-sm font-bold">Clases reconocidas en papa</p>
             <div className="flex flex-wrap gap-2">
               {CLASES_PAPA.map((c) => (
@@ -353,4 +369,11 @@ function Bloque({ icono, titulo, items }: { icono: React.ReactNode; titulo: stri
       </ul>
     </div>
   );
+}
+
+function etiquetaSeveridad(severidad: DiagnosticoResultado["severidad"]): string {
+  if (severidad === "sana") return "Hoja sana";
+  if (severidad === "severa") return "Severidad grave";
+  if (severidad === "muy_severa") return "Severidad muy grave";
+  return `Severidad ${severidad}`;
 }
