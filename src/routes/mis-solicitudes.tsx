@@ -14,9 +14,9 @@ import { formatDateDDMMYYYY } from "@/lib/utils";
 export const Route = createFileRoute("/mis-solicitudes")({
   head: () => ({
     meta: [
-      { title: "Mis solicitudes de compra · KawsayTech" },
+      { title: "Mis solicitudes de compra · KawsayConnect" },
       { name: "description", content: "Sigue el estado de las ofertas que enviaste a los productores: pendientes, aceptadas y rechazadas." },
-      { property: "og:title", content: "Mis solicitudes de compra · KawsayTech" },
+      { property: "og:title", content: "Mis solicitudes de compra · KawsayConnect" },
       { property: "og:description", content: "Cantidad, precio ofrecido y fecha requerida de cada oferta." },
     ],
   }),

@@ -17,6 +17,7 @@ import {
   MapPin,
 } from "lucide-react";
 import heroImg from "@/assets/hero-campo.jpg";
+import logo from "@/assets/logo_KawsayConnect.png";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,13 +28,13 @@ import { inicioSegunRol, useAuth } from "@/lib/kawsay/auth";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "KawsayTech · Plataforma digital para agricultores y compradores" },
+      { title: "KawsayConnect · Plataforma digital para agricultores y compradores" },
       {
         name: "description",
         content:
-          "KawsayTech conecta a productores de papa y palta con compradores verificados: publica tu cosecha, recibe solicitudes y prepárate para módulos de IA agrícola.",
+          "KawsayConnect conecta a productores de papa y palta con compradores verificados: publica tu cosecha, recibe solicitudes y prepárate para módulos de IA agrícola.",
       },
-      { property: "og:title", content: "KawsayTech · Plataforma digital para el agro" },
+      { property: "og:title", content: "KawsayConnect · Plataforma digital para el agro" },
       {
         property: "og:description",
         content:
@@ -68,18 +69,16 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 border-b bg-card/85 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-primary/10 bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 md:px-8">
           <Link to="/" className="flex items-center gap-3">
-            <span className="gradient-field flex size-10 items-center justify-center rounded-2xl shadow-soft">
-              <Leaf className="size-5 text-primary-foreground" />
-            </span>
-            <span className="grid">
-              <span className="font-display text-base font-extrabold leading-none">KawsayTech</span>
+            <img src={logo} alt="KawsayConnect" className="h-10 w-40 object-contain object-left" />
+            <span className="grid sr-only">
+              <span className="font-display text-base font-extrabold leading-none">KawsayConnect</span>
               <span className="text-xs text-muted-foreground">Agro inteligente</span>
             </span>
           </Link>
-          <nav className="ml-6 hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+          <nav className="ml-8 hidden items-center gap-7 text-xs font-semibold text-primary md:flex">
             <a href="#plataforma" className="hover:text-foreground">Plataforma</a>
             <a href="#beneficios" className="hover:text-foreground">Beneficios</a>
             <a href="#como-funciona" className="hover:text-foreground">¿Cómo funciona?</a>
@@ -93,10 +92,10 @@ function Landing() {
               </Button>
             ) : (
               <>
-                <Button asChild variant="ghost" className="rounded-xl">
+                <Button asChild variant="ghost" className="rounded-full text-xs font-bold text-primary hover:bg-primary-soft">
                   <Link to="/auth">Iniciar sesión</Link>
                 </Button>
-                <Button asChild className="rounded-xl">
+                <Button asChild className="rounded-full px-6 text-xs font-bold">
                   <Link to="/auth">Crear cuenta</Link>
                 </Button>
               </>
@@ -105,62 +104,63 @@ function Landing() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-20 px-4 py-10 md:px-8 md:py-14">
-        <section className="overflow-hidden rounded-[2rem] border bg-card shadow-lift">
-          <div className="grid lg:grid-cols-2">
-            <div className="flex flex-col justify-center gap-6 p-8 md:p-12">
-              <Badge className="w-fit rounded-full bg-primary-soft text-primary">
+      <main className="mx-auto max-w-7xl space-y-20 px-4 py-6 md:px-8 md:py-8">
+        <section className="hero-showcase relative overflow-hidden rounded-[2rem] border border-primary/10 bg-card shadow-lift">
+          <div className="grid min-h-[34rem] lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="relative z-10 flex flex-col justify-center gap-6 px-7 py-12 md:px-12 lg:py-16">
+              <Badge className="w-fit rounded-full bg-primary-soft px-3 py-1 text-xs font-bold text-primary">
                 <Leaf className="mr-1 size-3" /> MVP: papa y palta
               </Badge>
-              <h1 className="font-display text-4xl font-extrabold leading-[1.05] md:text-5xl">
-                Vende tu cosecha a un precio justo, sin intermediarios
+              <h1 className="max-w-xl font-display text-4xl font-extrabold leading-[1.04] text-primary md:text-6xl">
+                Vende tu cosecha a un <span className="text-success">precio justo, sin intermediarios</span>
               </h1>
-              <p className="max-w-xl text-lg text-muted-foreground">
-                KawsayTech es la plataforma integral del agricultor peruano: hoy comercializa papa y
+              <p className="max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+                KawsayConnect es la plataforma integral del agricultor peruano: hoy comercializa papa y
                 palta con compradores verificados; mañana, diagnostica enfermedades y recibe alertas
                 climáticas con inteligencia artificial.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild size="lg" className="h-14 rounded-2xl px-8 text-base">
+              <div className="flex flex-wrap gap-3 pt-1">
+                <Button asChild size="lg" className="button-primary h-12 rounded-full px-8 text-sm font-bold">
                   <Link to="/auth">
                     Crear cuenta <ArrowRight className="ml-2 size-5" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="secondary" className="h-14 rounded-2xl px-8 text-base">
+                <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-primary px-8 text-sm font-bold text-primary">
                   <Link to="/auth">Iniciar sesión</Link>
                 </Button>
               </div>
-              <div className="flex flex-wrap gap-6 pt-2 text-sm text-muted-foreground">
+              <div className="flex flex-wrap gap-x-5 gap-y-3 pt-2 text-xs font-medium text-primary">
                 <span className="flex items-center gap-2">
                   <ShieldCheck className="size-4 text-primary" /> Compradores verificados
                 </span>
+                <span className="hidden h-5 w-px bg-primary/25 sm:block" />
                 <span className="flex items-center gap-2">
                   <Smartphone className="size-4 text-primary" /> Fácil desde el celular
                 </span>
               </div>
             </div>
-            <div className="relative min-h-[18rem]">
+            <div className="hero-visual relative min-h-[22rem] lg:min-h-full">
               <img
                 src={heroImg}
                 alt="Agricultor andino usando una tablet en su campo de papa al amanecer"
                 width={1600}
                 height={912}
-                className="size-full object-cover"
+                className="size-full object-cover object-center lg:rounded-l-[45%]"
               />
             </div>
           </div>
         </section>
 
-        <section id="plataforma" className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+        <section id="plataforma" className="landing-section grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div className="space-y-4">
             <h2 className="font-display text-3xl font-extrabold">Una plataforma, dos experiencias</h2>
             <p className="text-lg text-muted-foreground">
-              KawsayTech identifica automáticamente tu rol al iniciar sesión y te muestra únicamente
+              KawsayConnect identifica automáticamente tu rol al iniciar sesión y te muestra únicamente
               las herramientas que necesitas.
             </p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            <Card className="gap-2 rounded-3xl border-primary/25 bg-accent/40 p-6 shadow-none">
+            <Card className="landing-card gap-2 rounded-3xl border-primary/25 bg-accent/40 p-6 shadow-none">
               <Sprout className="size-8 text-primary" />
               <h3 className="font-display text-lg font-bold">Productor agrícola</h3>
               <p className="text-sm text-muted-foreground">
@@ -168,7 +168,7 @@ function Landing() {
                 revisa estadísticas.
               </p>
             </Card>
-            <Card className="gap-2 rounded-3xl border-primary/25 bg-accent/40 p-6 shadow-none">
+            <Card className="landing-card gap-2 rounded-3xl border-primary/25 bg-accent/40 p-6 shadow-none">
               <Store className="size-8 text-primary" />
               <h3 className="font-display text-lg font-bold">Comprador</h3>
               <p className="text-sm text-muted-foreground">
@@ -179,11 +179,11 @@ function Landing() {
           </div>
         </section>
 
-        <section id="beneficios" className="space-y-6">
+        <section id="beneficios" className="landing-section space-y-6">
           <h2 className="font-display text-3xl font-extrabold">Beneficios</h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {beneficios.map((b) => (
-              <Card key={b.t} className="gap-3 rounded-3xl p-6 shadow-soft">
+              <Card key={b.t} className="landing-card gap-3 rounded-3xl p-6 shadow-soft">
                 <span className="gradient-field flex size-12 items-center justify-center rounded-2xl">
                   <b.icon className="size-6 text-primary-foreground" />
                 </span>
@@ -194,7 +194,7 @@ function Landing() {
           </div>
         </section>
 
-        <section id="como-funciona" className="space-y-6">
+        <section id="como-funciona" className="landing-section space-y-6">
           <h2 className="font-display text-3xl font-extrabold">¿Cómo funciona?</h2>
           <div className="grid gap-5 md:grid-cols-4">
             {[
@@ -203,7 +203,7 @@ function Landing() {
               { n: "3", t: "Negocia", d: "Solicitudes con cantidad, precio ofrecido y fecha de entrega." },
               { n: "4", t: "Cierra la venta", d: "Acepta la mejor oferta y queda registrada en tu historial." },
             ].map((s) => (
-              <Card key={s.n} className="gap-2 rounded-3xl border-primary/20 bg-accent/40 p-6 shadow-none">
+              <Card key={s.n} className="landing-card gap-2 rounded-3xl border-primary/20 bg-accent/40 p-6 shadow-none">
                 <span className="font-display text-4xl font-extrabold text-primary">{s.n}</span>
                 <h3 className="font-display text-lg font-bold">{s.t}</h3>
                 <p className="text-sm text-muted-foreground">{s.d}</p>
@@ -226,7 +226,7 @@ function Landing() {
           </div>
         </section>
 
-        <section id="modulos" className="space-y-6">
+        <section id="modulos" className="landing-section space-y-6">
           <div>
             <h2 className="font-display text-3xl font-extrabold">Módulos de la plataforma</h2>
             <p className="text-muted-foreground">
@@ -235,7 +235,7 @@ function Landing() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {modulos.map((m) => (
-              <Card key={m.titulo} className="gap-3 rounded-3xl p-6 shadow-soft">
+              <Card key={m.titulo} className="landing-card gap-3 rounded-3xl p-6 shadow-soft">
                 <div className="flex items-center justify-between">
                   <span
                     className={`flex size-12 items-center justify-center rounded-2xl ${m.activo ? "gradient-field text-primary-foreground" : "bg-muted text-muted-foreground"}`}
@@ -256,13 +256,13 @@ function Landing() {
           </div>
         </section>
 
-        <section id="contacto" className="overflow-hidden rounded-[2rem] border bg-card shadow-lift">
+        <section id="contacto" className="landing-section overflow-hidden rounded-[2rem] border bg-card shadow-lift">
           <div className="grid gap-8 p-8 md:grid-cols-2 md:p-12">
             <div className="space-y-4">
               <h2 className="font-display text-3xl font-extrabold">Contacto</h2>
               <p className="text-muted-foreground">
                 ¿Eres cooperativa, exportadora o programa de desarrollo agrario? Conversemos sobre
-                cómo integrar KawsayTech en tu cadena de valor.
+                cómo integrar KawsayConnect en tu cadena de valor.
               </p>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-center gap-3"><Mail className="size-4 text-primary" /> contacto@kawsaytech.pe</li>
@@ -290,7 +290,7 @@ function Landing() {
 
       <footer className="border-t bg-card/60">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm text-muted-foreground md:px-8">
-          <span>© 2026 KawsayTech · Plataforma agrícola inteligente</span>
+          <span>© 2026 KawsayConnect · Plataforma agrícola inteligente</span>
           <Link to="/arquitectura" className="hover:text-foreground">Arquitectura del proyecto</Link>
         </div>
       </footer>

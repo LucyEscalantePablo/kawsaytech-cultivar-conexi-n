@@ -11,9 +11,9 @@ import type { CultivoId } from "@/lib/kawsay/types";
 export const Route = createFileRoute("/mis-cultivos")({
   head: () => ({
     meta: [
-      { title: "Mis cultivos · KawsayTech" },
+      { title: "Mis cultivos · KawsayConnect" },
       { name: "description", content: "Resumen de tus cultivos de papa y palta: variedades sembradas, volumen publicado y valor estimado." },
-      { property: "og:title", content: "Mis cultivos · KawsayTech" },
+      { property: "og:title", content: "Mis cultivos · KawsayConnect" },
       { property: "og:description", content: "Controla tus variedades, volúmenes y campañas activas." },
     ],
   }),

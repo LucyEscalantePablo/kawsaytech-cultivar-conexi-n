@@ -16,13 +16,13 @@ import { SUELOS, calcularPlan, type SueloId } from "@/lib/kawsay/agro";
 export const Route = createFileRoute("/fertilizantes")({
   head: () => ({
     meta: [
-      { title: "Calculadora de fertilizantes · KawsayTech" },
+      { title: "Calculadora de fertilizantes · KawsayConnect" },
       {
         name: "description",
         content:
           "Calcula la dosis de nitrógeno, fósforo y potasio para papa y palta según área, tipo de suelo y rendimiento esperado.",
       },
-      { property: "og:title", content: "Calculadora de fertilizantes · KawsayTech" },
+      { property: "og:title", content: "Calculadora de fertilizantes · KawsayConnect" },
       { property: "og:description", content: "Plan de fertilización por etapa con dosis y sacos necesarios." },
     ],
   }),

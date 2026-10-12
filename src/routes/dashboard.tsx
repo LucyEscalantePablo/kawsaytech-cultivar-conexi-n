@@ -21,9 +21,9 @@ import { formatDateDDMMYYYY } from "@/lib/utils";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard comercial · KawsayTech" },
+      { title: "Dashboard comercial · KawsayConnect" },
       { name: "description", content: "Resumen de publicaciones, ventas, solicitudes e ingresos de tu campaña agrícola." },
-      { property: "og:title", content: "Dashboard comercial · KawsayTech" },
+      { property: "og:title", content: "Dashboard comercial · KawsayConnect" },
       { property: "og:description", content: "Publicaciones, ventas, solicitudes y precio promedio en un solo panel." },
     ],
   }),

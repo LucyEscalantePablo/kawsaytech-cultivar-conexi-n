@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/arquitectura")({
   head: () => ({
     meta: [
-      { title: "Arquitectura del sistema · KawsayTech" },
-      { name: "description", content: "Arquitectura modular de KawsayTech: capas, estructura de carpetas, modelo de base de datos, APIs REST y flujos de usuario." },
-      { property: "og:title", content: "Arquitectura del sistema · KawsayTech" },
+      { title: "Arquitectura del sistema · KawsayConnect" },
+      { name: "description", content: "Arquitectura modular de KawsayConnect: capas, estructura de carpetas, modelo de base de datos, APIs REST y flujos de usuario." },
+      { property: "og:title", content: "Arquitectura del sistema · KawsayConnect" },
       { property: "og:description", content: "Documentación técnica: módulos, base de datos, endpoints y buenas prácticas." },
     ],
   }),

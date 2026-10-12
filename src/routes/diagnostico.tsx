@@ -21,13 +21,13 @@ import { formatDateTimeShort } from "@/lib/utils";
 export const Route = createFileRoute("/diagnostico")({
   head: () => ({
     meta: [
-      { title: "Diagnóstico con IA · KawsayTech" },
+      { title: "Diagnóstico con IA · KawsayConnect" },
       {
         name: "description",
         content:
           "Sube una fotografía de tu cultivo de papa o palta y recibe el diagnóstico de enfermedades con inteligencia artificial, severidad y tratamiento.",
       },
-      { property: "og:title", content: "Diagnóstico con IA · KawsayTech" },
+      { property: "og:title", content: "Diagnóstico con IA · KawsayConnect" },
       { property: "og:description", content: "Detecta enfermedades de papa y palta desde una foto." },
     ],
   }),

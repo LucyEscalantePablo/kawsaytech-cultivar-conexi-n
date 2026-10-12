@@ -10,9 +10,9 @@ import { useAuth } from "@/lib/kawsay/auth";
 export const Route = createFileRoute("/favoritos")({
   head: () => ({
     meta: [
-      { title: "Mis favoritos · KawsayTech" },
+      { title: "Mis favoritos · KawsayConnect" },
       { name: "description", content: "Productos agrícolas que guardaste para revisar o negociar más tarde." },
-      { property: "og:title", content: "Mis favoritos · KawsayTech" },
+      { property: "og:title", content: "Mis favoritos · KawsayConnect" },
       { property: "og:description", content: "Tus publicaciones de papa y palta guardadas." },
     ],
   }),

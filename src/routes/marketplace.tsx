@@ -14,9 +14,9 @@ import { REGIONES, soles, useKawsayData } from "@/lib/kawsay/store";
 export const Route = createFileRoute("/marketplace")({
   head: () => ({
     meta: [
-      { title: "Marketplace de papa y palta · KawsayTech" },
+      { title: "Marketplace de papa y palta · KawsayConnect" },
       { name: "description", content: "Explora publicaciones de papa y palta de productores verificados, con filtros por precio, región, calidad y cantidad." },
-      { property: "og:title", content: "Marketplace de papa y palta · KawsayTech" },
+      { property: "og:title", content: "Marketplace de papa y palta · KawsayConnect" },
       { property: "og:description", content: "Compra directo del agricultor: precio, cantidad, ubicación y calificación en cada publicación." },
     ],
   }),

@@ -22,13 +22,13 @@ import type { CultivoId } from "@/lib/kawsay/types";
 export const Route = createFileRoute("/estadisticas")({
   head: () => ({
     meta: [
-      { title: "Estadísticas agrícolas · KawsayTech" },
+      { title: "Estadísticas agrícolas · KawsayConnect" },
       {
         name: "description",
         content:
           "Evolución de precios de papa y palta, ingresos por mes, volumen vendido y comparativo de precios por región.",
       },
-      { property: "og:title", content: "Estadísticas agrícolas · KawsayTech" },
+      { property: "og:title", content: "Estadísticas agrícolas · KawsayConnect" },
       { property: "og:description", content: "Indicadores de precio, ingreso y volumen de tus ventas." },
     ],
   }),

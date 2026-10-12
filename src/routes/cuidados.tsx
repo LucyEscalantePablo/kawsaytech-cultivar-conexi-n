@@ -15,13 +15,13 @@ import { calendarioCuidados, type Labor } from "@/lib/kawsay/agro";
 export const Route = createFileRoute("/cuidados")({
   head: () => ({
     meta: [
-      { title: "Cuidados del cultivo · KawsayTech" },
+      { title: "Cuidados del cultivo · KawsayConnect" },
       {
         name: "description",
         content:
           "Calendario agrícola de papa y palta: riego, fertilización, control de plagas y cosecha, calculado desde tu fecha de siembra.",
       },
-      { property: "og:title", content: "Cuidados del cultivo · KawsayTech" },
+      { property: "og:title", content: "Cuidados del cultivo · KawsayConnect" },
       { property: "og:description", content: "Sabe qué hacer cada semana en tu parcela." },
     ],
   }),

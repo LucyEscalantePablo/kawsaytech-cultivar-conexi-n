@@ -28,13 +28,13 @@ import type { CultivoId } from "@/lib/kawsay/types";
 export const Route = createFileRoute("/comercializar")({
   head: () => ({
     meta: [
-      { title: "Comercializar mi producto · KawsayTech" },
+      { title: "Comercializar mi producto · KawsayConnect" },
       {
         name: "description",
         content:
           "Centro de comercialización del productor: publica tu cosecha, revisa precios de referencia, gestiona publicaciones activas y responde solicitudes de compra.",
       },
-      { property: "og:title", content: "Comercializar mi producto · KawsayTech" },
+      { property: "og:title", content: "Comercializar mi producto · KawsayConnect" },
       {
         property: "og:description",
         content: "Publica, negocia y vende tu papa y palta directo al comprador.",

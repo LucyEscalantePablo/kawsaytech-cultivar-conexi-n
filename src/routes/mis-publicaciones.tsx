@@ -19,9 +19,9 @@ import {
 export const Route = createFileRoute("/mis-publicaciones")({
   head: () => ({
     meta: [
-      { title: "Mis publicaciones · KawsayTech" },
+      { title: "Mis publicaciones · KawsayConnect" },
       { name: "description", content: "Gestiona tus publicaciones de papa y palta: editar, pausar, duplicar, marcar vendido o eliminar." },
-      { property: "og:title", content: "Mis publicaciones · KawsayTech" },
+      { property: "og:title", content: "Mis publicaciones · KawsayConnect" },
       { property: "og:description", content: "Control total de tus publicaciones agrícolas en un solo lugar." },
     ],
   }),

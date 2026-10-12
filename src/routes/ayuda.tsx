@@ -8,9 +8,9 @@ import { Card } from "@/components/ui/card";
 export const Route = createFileRoute("/ayuda")({
   head: () => ({
     meta: [
-      { title: "Centro de ayuda · KawsayTech" },
-      { name: "description", content: "Preguntas frecuentes sobre cómo publicar, vender y recibir solicitudes de compra en KawsayTech." },
-      { property: "og:title", content: "Centro de ayuda · KawsayTech" },
+      { title: "Centro de ayuda · KawsayConnect" },
+      { name: "description", content: "Preguntas frecuentes sobre cómo publicar, vender y recibir solicitudes de compra en KawsayConnect." },
+      { property: "og:title", content: "Centro de ayuda · KawsayConnect" },
       { property: "og:description", content: "Guías cortas y soporte directo para agricultores." },
     ],
   }),
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/ayuda")({
 
 const faqs = [
   { q: "¿Cómo publico mi cosecha?", a: "Entra a Publicar producto, elige papa o palta, escribe la cantidad y el precio, sube fotos y presiona el botón verde. Toma menos de un minuto." },
-  { q: "¿Cuánto cuesta usar KawsayTech?", a: "Publicar es gratis durante el MVP. No cobramos comisión por las ventas de esta campaña." },
+  { q: "¿Cuánto cuesta usar KawsayConnect?", a: "Publicar es gratis durante el MVP. No cobramos comisión por las ventas de esta campaña." },
   { q: "¿Cómo recibo el pago?", a: "El acuerdo de pago se hace directamente con el comprador. Recomendamos pago al contado en chacra o transferencia antes del recojo." },
   { q: "¿Puedo pausar una publicación?", a: "Sí. En Mis publicaciones usa el botón Pausar; tu producto deja de mostrarse y puedes activarlo cuando quieras." },
   { q: "¿Cuándo llegan los módulos de IA?", a: "Diagnóstico, fertilizantes, cuidados y alertas climáticas ya están diseñados y se habilitarán en las siguientes versiones." },

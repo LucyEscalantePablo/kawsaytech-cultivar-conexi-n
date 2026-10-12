@@ -9,9 +9,9 @@ import { Separator } from "@/components/ui/separator";
 export const Route = createFileRoute("/configuracion")({
   head: () => ({
     meta: [
-      { title: "Configuración · KawsayTech" },
-      { name: "description", content: "Configura notificaciones, idioma, moneda y preferencias de la plataforma KawsayTech." },
-      { property: "og:title", content: "Configuración · KawsayTech" },
+      { title: "Configuración · KawsayConnect" },
+      { name: "description", content: "Configura notificaciones, idioma, moneda y preferencias de la plataforma KawsayConnect." },
+      { property: "og:title", content: "Configuración · KawsayConnect" },
       { property: "og:description", content: "Notificaciones, idioma y preferencias de cuenta." },
     ],
   }),

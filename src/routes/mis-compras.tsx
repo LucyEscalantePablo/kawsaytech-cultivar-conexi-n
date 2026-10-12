@@ -12,9 +12,9 @@ import { formatDateDDMMYYYY } from "@/lib/utils";
 export const Route = createFileRoute("/mis-compras")({
   head: () => ({
     meta: [
-      { title: "Mis compras · KawsayTech" },
-      { name: "description", content: "Historial de compras agrícolas realizadas en KawsayTech: producto, productor, cantidad y monto." },
-      { property: "og:title", content: "Mis compras · KawsayTech" },
+      { title: "Mis compras · KawsayConnect" },
+      { name: "description", content: "Historial de compras agrícolas realizadas en KawsayConnect: producto, productor, cantidad y monto." },
+      { property: "og:title", content: "Mis compras · KawsayConnect" },
       { property: "og:description", content: "Todas tus operaciones cerradas en un solo lugar." },
     ],
   }),

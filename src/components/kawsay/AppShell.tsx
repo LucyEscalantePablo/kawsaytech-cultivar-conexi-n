@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Leaf, Bell, LogOut } from "lucide-react";
+import { Bell, LogOut } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
+import logo from "@/assets/logo_KawsayConnect.png";
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { navPorRol, type NavItem } from "@/lib/kawsay/nav";
-import { cerrarSesion, inicioSegunRol, rolLabel, useAuth, type Rol } from "@/lib/kawsay/auth";
+import { cerrarSesion, inicioSegunRol, useAuth, type Rol } from "@/lib/kawsay/auth";
 
 function NavSection({ label, items }: { label: string; items: NavItem[] }) {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -72,15 +73,7 @@ function KawsaySidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-3 py-4">
         <Link to="/" className="flex items-center gap-3">
-          <span className="gradient-field flex size-10 shrink-0 items-center justify-center rounded-2xl shadow-soft">
-            <Leaf className="size-5 text-primary-foreground" />
-          </span>
-          <span className="grid group-data-[collapsible=icon]:hidden">
-            <span className="font-display text-base font-extrabold leading-none">KawsayTech</span>
-            <span className="text-xs text-muted-foreground">
-              {rol ? rolLabel[rol] : "Agro inteligente"}
-            </span>
-          </span>
+          <img src={logo} alt="KawsayConnect" className="h-10 w-36 shrink-0 object-contain object-left group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:object-cover" />
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -146,9 +139,7 @@ export function AppShell({
   if (cargando || !usuario || !autorizado) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <span className="gradient-field flex size-12 animate-pulse items-center justify-center rounded-2xl">
-          <Leaf className="size-6 text-primary-foreground" />
-        </span>
+        <img src={logo} alt="KawsayConnect" className="h-16 w-48 animate-pulse object-contain object-left" />
       </div>
     );
   }

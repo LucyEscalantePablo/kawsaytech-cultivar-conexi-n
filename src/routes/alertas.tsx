@@ -26,13 +26,13 @@ import { generarAlertas, obtenerClima, type AlertaClima, type DiaClima } from "@
 export const Route = createFileRoute("/alertas")({
   head: () => ({
     meta: [
-      { title: "Alertas climáticas · KawsayTech" },
+      { title: "Alertas climáticas · KawsayConnect" },
       {
         name: "description",
         content:
           "Pronóstico de 7 días y alertas de helada, lluvia intensa, granizo y viento para tu región agrícola en Perú.",
       },
-      { property: "og:title", content: "Alertas climáticas · KawsayTech" },
+      { property: "og:title", content: "Alertas climáticas · KawsayConnect" },
       { property: "og:description", content: "Avisos tempranos de helada, lluvia y granizo por región." },
     ],
   }),

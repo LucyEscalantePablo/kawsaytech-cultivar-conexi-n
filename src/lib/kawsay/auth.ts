@@ -44,7 +44,7 @@ const SEED: AuthState = {
     },
     {
       id: "u-3",
-      nombre: "Equipo KawsayTech",
+      nombre: "Equipo KawsayConnect",
       email: "admin@kawsaytech.pe",
       password: "kawsay123",
       rol: "ADMINISTRADOR",

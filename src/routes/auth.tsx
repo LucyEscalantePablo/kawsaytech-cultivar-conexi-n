@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import logo from "@/assets/logo_KawsayConnect.png";
 import { useEffect, useState } from "react";
-import { Leaf, Sprout, ShoppingCart, ArrowRight } from "lucide-react";
+import { Sprout, ShoppingCart, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,13 +14,13 @@ import { iniciarSesion, inicioSegunRol, registrar, useAuth, type Rol } from "@/l
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Iniciar sesión o crear cuenta · KawsayTech" },
+      { title: "Iniciar sesión o crear cuenta · KawsayConnect" },
       {
         name: "description",
         content:
-          "Accede a KawsayTech como productor agrícola o comprador y gestiona la comercialización de papa y palta desde tu propio panel.",
+          "Accede a KawsayConnect como productor agrícola o comprador y gestiona la comercialización de papa y palta desde tu propio panel.",
       },
-      { property: "og:title", content: "Iniciar sesión o crear cuenta · KawsayTech" },
+      { property: "og:title", content: "Iniciar sesión o crear cuenta · KawsayConnect" },
       { property: "og:description", content: "Un panel distinto para productores y compradores." },
     ],
   }),
@@ -46,7 +47,7 @@ function Auth() {
       toast.error(res.error ?? "No pudimos iniciar sesión");
       return;
     }
-    toast.success("Bienvenido a KawsayTech");
+    toast.success("Bienvenido a KawsayConnect");
     navigate({ to: inicioSegunRol(res.rol!), replace: true });
   };
 
@@ -79,23 +80,20 @@ function Auth() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-[1fr_1.1fr]">
-      <aside className="gradient-field hidden flex-col justify-between p-12 text-primary-foreground lg:flex">
+      <aside className="hidden flex-col justify-between bg-primary-soft p-12 text-foreground lg:flex">
         <Link to="/" className="flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-primary-foreground/15">
-            <Leaf className="size-6" />
-          </span>
-          <span className="font-display text-xl font-extrabold">KawsayTech</span>
+          <img src={logo} alt="KawsayConnect" className="h-12 w-48 object-contain object-left" />
         </Link>
         <div className="space-y-5">
           <h2 className="font-display text-4xl font-extrabold leading-tight">
             Un panel distinto para cada rol del agro
           </h2>
-          <p className="max-w-md text-primary-foreground/85">
+          <p className="max-w-md text-muted-foreground">
             Los productores publican y administran su cosecha. Los compradores buscan, guardan
             favoritos y envían solicitudes. Todo en la misma plataforma.
           </p>
         </div>
-        <p className="text-sm text-primary-foreground/75">
+        <p className="text-sm text-muted-foreground">
           Cuentas de demostración: productor@kawsaytech.pe · comprador@kawsaytech.pe · contraseña
           kawsay123
         </p>
@@ -104,7 +102,7 @@ function Auth() {
       <main className="flex items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md gap-6 rounded-3xl p-7 shadow-lift md:p-9">
           <div className="space-y-1">
-            <h1 className="font-display text-2xl font-extrabold">Accede a KawsayTech</h1>
+            <h1 className="font-display text-2xl font-extrabold">Accede a KawsayConnect</h1>
             <p className="text-sm text-muted-foreground">
               Inicia sesión o crea tu cuenta para entrar a tu panel.
             </p>

@@ -16,9 +16,9 @@ import { actualizarAgricultorPerfil, getAgricultor, useKawsayData } from "@/lib/
 export const Route = createFileRoute("/perfil")({
   head: () => ({
     meta: [
-      { title: "Mi perfil de productor · KawsayTech" },
-      { name: "description", content: "Administra tus datos de productor, zona de cultivo, contacto y reputación en KawsayTech." },
-      { property: "og:title", content: "Mi perfil de productor · KawsayTech" },
+      { title: "Mi perfil de productor · KawsayConnect" },
+      { name: "description", content: "Administra tus datos de productor, zona de cultivo, contacto y reputación en KawsayConnect." },
+      { property: "og:title", content: "Mi perfil de productor · KawsayConnect" },
       { property: "og:description", content: "Tu identidad como agricultor verificado en la plataforma." },
     ],
   }),

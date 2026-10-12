@@ -13,14 +13,14 @@ import { useAuth } from "@/lib/kawsay/auth";
 export const Route = createFileRoute("/comprador")({
   head: () => ({
     meta: [
-      { title: "Panel del comprador · KawsayTech" },
+      { title: "Panel del comprador · KawsayConnect" },
       {
         name: "description",
         content:
           "Busca papa y palta de productores verificados, revisa tus solicitudes enviadas, favoritos y compras realizadas.",
       },
-      { property: "og:title", content: "Panel del comprador · KawsayTech" },
-      { property: "og:description", content: "Tu centro de compras agrícolas en KawsayTech." },
+      { property: "og:title", content: "Panel del comprador · KawsayConnect" },
+      { property: "og:description", content: "Tu centro de compras agrícolas en KawsayConnect." },
     ],
   }),
   component: PanelComprador,

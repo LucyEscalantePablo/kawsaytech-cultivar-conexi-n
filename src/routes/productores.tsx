@@ -11,9 +11,9 @@ import { useKawsayData } from "@/lib/kawsay/store";
 export const Route = createFileRoute("/productores")({
   head: () => ({
     meta: [
-      { title: "Productores verificados · KawsayTech" },
-      { name: "description", content: "Conoce a los productores de papa y palta de KawsayTech: región, calificación, ventas y publicaciones activas." },
-      { property: "og:title", content: "Productores verificados · KawsayTech" },
+      { title: "Productores verificados · KawsayConnect" },
+      { name: "description", content: "Conoce a los productores de papa y palta de KawsayConnect: región, calificación, ventas y publicaciones activas." },
+      { property: "og:title", content: "Productores verificados · KawsayConnect" },
       { property: "og:description", content: "Contacta directamente al agricultor detrás de cada publicación." },
     ],
   }),

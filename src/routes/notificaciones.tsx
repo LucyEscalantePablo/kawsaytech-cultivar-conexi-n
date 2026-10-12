@@ -11,9 +11,9 @@ import { useAuth } from "@/lib/kawsay/auth";
 export const Route = createFileRoute("/notificaciones")({
   head: () => ({
     meta: [
-      { title: "Notificaciones · KawsayTech" },
+      { title: "Notificaciones · KawsayConnect" },
       { name: "description", content: "Avisos sobre el estado de tus solicitudes de compra y novedades de los productores que sigues." },
-      { property: "og:title", content: "Notificaciones · KawsayTech" },
+      { property: "og:title", content: "Notificaciones · KawsayConnect" },
       { property: "og:description", content: "Respuestas de productores y actualizaciones de tus ofertas." },
     ],
   }),

@@ -12,9 +12,9 @@ import { formatDateDDMMYYYY } from "@/lib/utils";
 export const Route = createFileRoute("/historial")({
   head: () => ({
     meta: [
-      { title: "Historial de ventas · KawsayTech" },
+      { title: "Historial de ventas · KawsayConnect" },
       { name: "description", content: "Historial de ventas, solicitudes, productos vendidos e ingresos acumulados por campaña." },
-      { property: "og:title", content: "Historial de ventas · KawsayTech" },
+      { property: "og:title", content: "Historial de ventas · KawsayConnect" },
       { property: "og:description", content: "Todo lo que vendiste y cuánto ganaste, ordenado por fecha." },
     ],
   }),

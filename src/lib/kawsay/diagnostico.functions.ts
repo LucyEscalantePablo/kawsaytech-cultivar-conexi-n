@@ -82,11 +82,7 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
     const buffer = Buffer.from(match[2], "base64");
     await fs.writeFile(tempFile, buffer);
 
-<<<<<<< Updated upstream
-    const pythonBin = process.env.PYTHON_BIN ?? "python";
-=======
     const pythonBin = process.env.PYTHON_BIN ?? (await encontrarPythonLocal());
->>>>>>> Stashed changes
     const script = path.resolve(process.cwd(), "ml", "infer_potato_model.py");
 
     const result = await new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
@@ -140,11 +136,8 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
 
     const clase = claseDe("papa", base.claseId) ?? clases[0]!;
     const confianza = Math.max(0, Math.min(100, base.probabilidad));
-<<<<<<< Updated upstream
-=======
     const porcentajeAreaAfectada = clase.id === "sano" ? 0 : Math.round(Number(parsed.lesion_area) || 0);
     const severidad = clasificarSeveridad(clase.id, porcentajeAreaAfectada);
->>>>>>> Stashed changes
 
     return {
       esCultivo: true,
@@ -155,13 +148,8 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
       confianza,
       concluyente: confianza >= UMBRAL_CONFIANZA,
       probabilidades,
-<<<<<<< Updated upstream
-      severidad: confianza >= 70 ? "moderada" : "leve",
-      porcentajeAreaAfectada: confianza >= 70 ? 35 : 8,
-=======
       severidad,
       porcentajeAreaAfectada,
->>>>>>> Stashed changes
       calidadImagen: "buena",
       problemasImagen: [],
       sintomas: clase.id === "sano" ? ["Hoja con color verde uniforme y sin lesiones visibles"] : ["Se observan manchas compatibles con la enfermedad detectada"],
@@ -182,11 +170,6 @@ async function intentarInferenciaLocalPapa(imagen: string): Promise<DiagnosticoR
   }
 }
 
-<<<<<<< Updated upstream
-export const analizarCultivo = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => Input.parse(data))
-  .handler(async ({ data }): Promise<DiagnosticoResultado> => {
-=======
 async function encontrarPythonLocal(): Promise<string> {
   const rutas = [
     path.resolve(process.cwd(), ".venv312", "Scripts", "python.exe"),
@@ -209,7 +192,6 @@ export const analizarCultivo = createServerFn({ method: "POST" })
     if (!data.imagen) {
       return diagnosticarDesdeNota(data.nota ?? "");
     }
->>>>>>> Stashed changes
     if (data.cultivo === "papa") {
       const inferenciaLocal = await intentarInferenciaLocalPapa(data.imagen);
       if (inferenciaLocal) {

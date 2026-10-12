@@ -26,9 +26,9 @@ export const Route = createFileRoute("/publicar")({
   }),
   head: () => ({
     meta: [
-      { title: "Publicar producto · KawsayTech" },
+      { title: "Publicar producto · KawsayConnect" },
       { name: "description", content: "Registra tu cosecha de papa o palta: variedad, cantidad, precio, calidad, ubicación y fotografías." },
-      { property: "og:title", content: "Publicar producto · KawsayTech" },
+      { property: "og:title", content: "Publicar producto · KawsayConnect" },
       { property: "og:description", content: "Formulario simple y con botones grandes para publicar tu cosecha en minutos." },
     ],
   }),

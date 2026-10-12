@@ -50,9 +50,9 @@ import { formatDateDDMMYYYY } from "@/lib/utils";
 export const Route = createFileRoute("/producto/$id")({
   head: () => ({
     meta: [
-      { title: "Detalle del producto · KawsayTech" },
+      { title: "Detalle del producto · KawsayConnect" },
       { name: "description", content: "Galería, precio, disponibilidad, ubicación y datos del agricultor para solicitar una compra directa." },
-      { property: "og:title", content: "Detalle del producto · KawsayTech" },
+      { property: "og:title", content: "Detalle del producto · KawsayConnect" },
       { property: "og:description", content: "Contacta al agricultor y envía tu solicitud de compra con precio y fecha." },
     ],
   }),
